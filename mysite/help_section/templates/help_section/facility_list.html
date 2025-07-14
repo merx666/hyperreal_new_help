@@ -63,7 +63,7 @@
                                         <div class="mb-1">
                                             <small class="text-muted">Uzależnienia:</small>
                                             {% for addiction_type in facility.addiction_types.all %}
-                                                <span class="badge bg-info me-1">{{ addiction_type.name }}</span>
+                                                <span class="badge bg-info me-1">{{ addiction_type.display_name }}</span>
                                             {% endfor %}
                                         </div>
                                     {% endif %}
@@ -72,7 +72,7 @@
                                         <div class="mb-1">
                                             <small class="text-muted">Typ placówki:</small>
                                             {% for facility_type in facility.facility_types.all %}
-                                                <span class="badge bg-success me-1">{{ facility_type.name }}</span>
+                                                <span class="badge bg-success me-1">{{ facility_type.display_name }}</span>
                                             {% endfor %}
                                         </div>
                                     {% endif %}
@@ -81,7 +81,7 @@
                                         <div class="mb-1">
                                             <small class="text-muted">Terapia:</small>
                                             {% for therapy_type in facility.therapy_types.all %}
-                                                <span class="badge bg-warning me-1">{{ therapy_type.name }}</span>
+                                                <span class="badge bg-warning me-1">{{ therapy_type.display_name }}</span>
                                             {% endfor %}
                                         </div>
                                     {% endif %}

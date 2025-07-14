@@ -58,7 +58,7 @@
                                 {% if facility.addiction_types.all %}
                                     <div class="mt-2">
                                         {% for addiction_type in facility.addiction_types.all %}
-                                            <span class="badge bg-secondary me-1">{{ addiction_type.name }}</span>
+                                            <span class="badge bg-secondary me-1">{{ addiction_type.display_name }}</span>
                                         {% endfor %}
                                     </div>
                                 {% endif %}

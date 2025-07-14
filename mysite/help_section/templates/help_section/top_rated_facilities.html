@@ -60,7 +60,7 @@
                                                 <div class="mb-1">
                                                     <small><strong>Uzależnienia:</strong></small><br>
                                                     {% for at in facility.addiction_types.all %}
-                                                        <span class="badge bg-primary me-1">{{ at.name }}</span>
+                                                        <span class="badge bg-primary me-1">{{ at.display_name }}</span>
                                                     {% endfor %}
                                                 </div>
                                             {% endif %}
@@ -69,7 +69,7 @@
                                                 <div class="mb-1">
                                                     <small><strong>Typ placówki:</strong></small><br>
                                                     {% for ft in facility.facility_types.all %}
-                                                        <span class="badge bg-success me-1">{{ ft.name }}</span>
+                                                        <span class="badge bg-success me-1">{{ ft.display_name }}</span>
                                                     {% endfor %}
                                                 </div>
                                             {% endif %}

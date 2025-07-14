@@ -118,6 +118,10 @@ class AddictionType(models.Model):
         verbose_name = "Rodzaj uzależnienia"
         verbose_name_plural = "Rodzaje uzależnień"
 
+    @property
+    def display_name(self):
+        return self.name.split(' | Hyperreal [H]elp - chcemy pomóc')[0] if self.name else ''
+
 class FacilityType(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -125,6 +129,10 @@ class FacilityType(models.Model):
     class Meta:
         verbose_name = "Typ placówki"
         verbose_name_plural = "Typy placówek"
+
+    @property
+    def display_name(self):
+        return self.name.split(' | Hyperreal [H]elp - chcemy pomóc')[0] if self.name else ''
 
 class Voivodeship(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -134,6 +142,10 @@ class Voivodeship(models.Model):
         verbose_name = "Województwo"
         verbose_name_plural = "Województwa"
 
+    @property
+    def display_name(self):
+        return self.name.split(' | Hyperreal [H]elp - chcemy pomóc')[0] if self.name else ''
+
 class ProgramLength(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -141,6 +153,10 @@ class ProgramLength(models.Model):
     class Meta:
         verbose_name = "Długość programu"
         verbose_name_plural = "Długości programów"
+
+    @property
+    def display_name(self):
+        return self.name.split(' | Hyperreal [H]elp - chcemy pomóc')[0] if self.name else ''
 
 class TherapyType(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -150,6 +166,10 @@ class TherapyType(models.Model):
         verbose_name = "Rodzaj terapii"
         verbose_name_plural = "Rodzaje terapii"
 
+    @property
+    def display_name(self):
+        return self.name.split(' | Hyperreal [H]elp - chcemy pomóc')[0] if self.name else ''
+
 class PsychotherapyType(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -157,6 +177,10 @@ class PsychotherapyType(models.Model):
     class Meta:
         verbose_name = "Psychoterapia"
         verbose_name_plural = "Psychoterapie"
+
+    @property
+    def display_name(self):
+        return self.name.split(' | Hyperreal [H]elp - chcemy pomóc')[0] if self.name else ''
 
 class CounselingType(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -166,6 +190,10 @@ class CounselingType(models.Model):
         verbose_name = "Poradnictwo"
         verbose_name_plural = "Poradnictwa"
 
+    @property
+    def display_name(self):
+        return self.name.split(' | Hyperreal [H]elp - chcemy pomóc')[0] if self.name else ''
+
 class LegalIssue(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -173,6 +201,10 @@ class LegalIssue(models.Model):
     class Meta:
         verbose_name = "Kłopot z prawem"
         verbose_name_plural = "Kłopoty z prawem"
+
+    @property
+    def display_name(self):
+        return self.name.split(' | Hyperreal [H]elp - chcemy pomóc')[0] if self.name else ''
 
 class AdditionalActivity(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -182,6 +214,10 @@ class AdditionalActivity(models.Model):
         verbose_name = "Działanie dodatkowe"
         verbose_name_plural = "Działania dodatkowe"
 
+    @property
+    def display_name(self):
+        return self.name.split(' | Hyperreal [H]elp - chcemy pomóc')[0] if self.name else ''
+
 class AgeGenderGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -189,6 +225,10 @@ class AgeGenderGroup(models.Model):
     class Meta:
         verbose_name = "Grupa wiekowa/płeć"
         verbose_name_plural = "Grupy wiekowe/płci"
+
+    @property
+    def display_name(self):
+        return self.name.split(' | Hyperreal [H]elp - chcemy pomóc')[0] if self.name else ''
 
 class Newsletter(models.Model):
     email = models.EmailField(unique=True)

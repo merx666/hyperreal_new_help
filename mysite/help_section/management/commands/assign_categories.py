@@ -8,8 +8,8 @@ def assign_m2m(facility, model, m2m_field, text_value):
     # Rozbij tekst po przecinkach, średnikach, enterach
     items = [i.strip().lower() for i in text_value.replace('\n', ',').replace(';', ',').split(',') if i.strip()]
     for item in items:
-        # Szukaj po name (case-insensitive)
-        obj = model.objects.filter(name__iexact=item).first()
+        # Szukaj po fragmencie nazwy (icontains)
+        obj = model.objects.filter(name__icontains=item).first()
         if obj:
             getattr(facility, m2m_field).add(obj)
 

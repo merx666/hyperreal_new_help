@@ -44,16 +44,16 @@
                     <div class="col-md-6">
                         <h5>Kategorie i klasyfikacje</h5>
                         <ul class="list-unstyled mb-0">
-                            <li><strong>Rodzaje uzależnień:</strong> {{ facility.addiction_types.all|join:', '|default:'-' }}</li>
-                            <li><strong>Typy placówki:</strong> {{ facility.facility_types.all|join:', '|default:'-' }}</li>
-                            <li><strong>Województwa:</strong> {{ facility.voivodeships.all|join:', '|default:'-' }}</li>
-                            <li><strong>Długości programów:</strong> {{ facility.program_lengths.all|join:', '|default:'-' }}</li>
-                            <li><strong>Rodzaje terapii:</strong> {{ facility.therapy_types.all|join:', '|default:'-' }}</li>
-                            <li><strong>Psychoterapie:</strong> {{ facility.psychotherapy_types.all|join:', '|default:'-' }}</li>
-                            <li><strong>Poradnictwa:</strong> {{ facility.counseling_types.all|join:', '|default:'-' }}</li>
-                            <li><strong>Działania dodatkowe:</strong> {{ facility.other_actions.all|join:', '|default:'-' }}</li>
-                            <li><strong>Kłopoty z prawem:</strong> {{ facility.legal_issues.all|join:', '|default:'-' }}</li>
-                            <li><strong>Grupy wiekowe/płeć:</strong> {{ facility.age_gender_groups.all|join:', '|default:'-' }}</li>
+                            <li><strong>Rodzaje uzależnień:</strong> {% for at in facility.addiction_types.all %}{{ at.display_name }}{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</li>
+                            <li><strong>Typy placówki:</strong> {% for ft in facility.facility_types.all %}{{ ft.display_name }}{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</li>
+                            <li><strong>Województwa:</strong> {% for v in facility.voivodeships.all %}{{ v.display_name }}{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</li>
+                            <li><strong>Długości programów:</strong> {% for pl in facility.program_lengths.all %}{{ pl.display_name }}{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</li>
+                            <li><strong>Rodzaje terapii:</strong> {% for tt in facility.therapy_types.all %}{{ tt.display_name }}{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</li>
+                            <li><strong>Psychoterapie:</strong> {% for pt in facility.psychotherapy_types.all %}{{ pt.display_name }}{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</li>
+                            <li><strong>Poradnictwa:</strong> {% for ct in facility.counseling_types.all %}{{ ct.display_name }}{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</li>
+                            <li><strong>Działania dodatkowe:</strong> {% for oa in facility.other_actions.all %}{{ oa.display_name }}{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</li>
+                            <li><strong>Kłopoty z prawem:</strong> {% for li in facility.legal_issues.all %}{{ li.display_name }}{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</li>
+                            <li><strong>Grupy wiekowe/płeć:</strong> {% for ag in facility.age_gender_groups.all %}{{ ag.display_name }}{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</li>
                         </ul>
                     </div>
                     <div class="col-md-6">

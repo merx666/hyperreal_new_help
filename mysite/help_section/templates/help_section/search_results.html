@@ -134,14 +134,14 @@
                                             {% if facility.addiction_types.all %}
                                                 <strong>Uzależnienia:</strong>
                                                 {% for at in facility.addiction_types.all %}
-                                                    <span class="badge bg-primary me-1">{{ at.name }}</span>
+                                                    <span class="badge bg-primary me-1">{{ at.display_name }}</span>
                                                 {% endfor %}
                                             {% endif %}
                                             
                                             {% if facility.facility_types.all %}
                                                 <br><strong>Typ placówki:</strong>
                                                 {% for ft in facility.facility_types.all %}
-                                                    <span class="badge bg-success me-1">{{ ft.name }}</span>
+                                                    <span class="badge bg-success me-1">{{ ft.display_name }}</span>
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
