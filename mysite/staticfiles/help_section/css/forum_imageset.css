@@ -1,0 +1,91 @@
+.row-item .folder:before, .row-item .folder:after {
+    //position: absolute;
+    top: 50%;
+    left: 8px;
+    width: 58px;
+    padding: 4px 0;
+	transform: translateY(-50%);
+	cursor: default;
+	text-align: center;
+	font-size: 28px;
+	font-family: FontAwesome;
+	font-style: normal;
+	font-weight: normal;
+	border-radius: 50%;
+	-webkit-text-stroke: 1px #fff;
+}
+
+.row-item .folder:before {
+	content: "\f016";
+	background-color: #e1e1e1;
+	border: 4px solid #fff;
+}
+
+.row-item .folder:before, .row-item .folder:after {
+	color: #bbb;
+	text-shadow: 1px 1px 1px #fff;
+	-webkit-text-stroke: 1px #ddd;
+}
+
+.rtl .row-item .folder:before, .rtl .row-item .folder:after {
+	right: 8px;
+}
+
+.row-item .folder-animation:before {
+	animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+	0% {
+		box-shadow: 0 0 0 0px rgba(153, 153, 153, 0.4);
+	}
+	100% {
+		box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
+	}
+}
+
+.row-item .folder:after {
+	margin-top: -16px;
+	margin-left: -16px;
+	font-size: 12px;
+}
+
+.row-item[class*="link"] .folder:before {
+	content: "\f0c1";
+}
+
+.row-item[class*="locked"] .folder:before  {
+	content: "\f023";
+}
+
+.row-item[class*="subforum"] .folder:before {
+	content: "\f0c5";
+}
+
+.topic_moved .folder:before {
+	content: "\f045";
+}
+
+.row-item[class*="hot"] .folder:before {
+	content: "\f06d";
+}
+
+.row-item[class*="sticky"] .folder:before {
+	content: "\f08d";
+}
+
+.row-item[class*="mine"] .folder:after {
+	content: "\f005";
+}
+
+.row-item[class*="global"] .folder:before, .row-item[class*="announce"] .folder:before {
+	content: "\f129";
+}
+
+.row-item[class*="unread"] .folder:before, .row-item[class*="unread"] .folder:after {
+	color: #C13B5B;
+}
+
+.row-item .folder:before, .row-item .folder:after {
+	color: #999;
+}

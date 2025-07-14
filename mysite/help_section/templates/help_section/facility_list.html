@@ -1,0 +1,35 @@
+{% extends 'help_section/help_page.html' %}
+{% load static %}
+
+{% block page_content %}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">
+                {{ category_name|default:"Placówki" }}
+            </div>
+            <div class="block-body">
+                {% for facility in facilities_list %}
+                    <article class="node node-osrodek node-teaser clearfix mb-3">
+                        <header>
+                            <h4><a href="{% url 'facility_detail' slug=facility.slug %}">{{ facility.name }}</a></h4>
+                        </header>
+                        
+                        {% if facility.full_address_text_detail %}
+                            <p class="mb-1"><small><strong>Adres:</strong> {{ facility.full_address_text_detail }}</small></p>
+                        {% elif facility.address_street or facility.address_city %}
+                             <p class="mb-1"><small><strong>Adres:</strong> {{ facility.address_street }}, {{ facility.address_city }}</small></p>
+                        {% endif %}
+
+                        <footer class="mt-2">
+                            <ul class="list-inline small">
+                                <li class="list-inline-item"><a href="{% url 'facility_detail' slug=facility.slug %}">Zobacz szczegóły...</a></li>
+                            </ul>
+                        </footer>
+                    </article>
+                {% empty %}
+                    <p>Nie znaleziono placówek w tej kategorii.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock page_content %}

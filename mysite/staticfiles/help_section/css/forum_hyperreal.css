@@ -1,0 +1,49 @@
+/* resetting all underlining in links */
+
+a:link { text-decoration: none; }
+
+a:visited { text-decoration: none; }
+
+a:hover { text-decoration: none; }
+
+a:active { text-decoration: none; }
+
+a.forumtitle
+{
+	font-size: x-large;
+}
+
+.karuzela
+{
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 1s ease;
+	-webkit-transition: opacity 1s ease;
+}
+
+.karuzela.slick-initialized
+{
+	visibility: visible;
+	opacity: 1;
+}
+/*
+#message-box { background-color: #e9ecef; }
+#subject { background-color: #e9ecef; }
+*/
+
+/* KONIECZNE DO AVATAROW Z JDENTICON */
+.timeline-icon canvas.avatar {
+        transform: translateY(-50%);
+}
+.timeline-userdata, .rtl .switch-profile .timeline-userdata {
+        width: 140px;
+	top: 75px;
+        right: 100%;
+        left: -170px;
+        text-align: right;
+	text-color: #fdfdfd;
+}
+
+.searchboks {
+	margin-left: 5px;
+}

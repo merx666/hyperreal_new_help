@@ -1,0 +1,119 @@
+{% extends 'help_section/help_page.html' %}
+{% load static %}
+{% load get_item %}
+
+{% block page_content %}
+
+{% if facility %}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">{{ facility.name }}</div>
+            <div class="block-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Adres</dt>
+                    <dd class="col-sm-9">{{ facility.full_address_text_detail|default:'-' }}</dd>
+                    <dt class="col-sm-3">Telefon</dt>
+                    <dd class="col-sm-9">{{ facility.phone_number|default:'-' }}</dd>
+                    <dt class="col-sm-3">E-mail</dt>
+                    <dd class="col-sm-9">{{ facility.email|default:'-' }}</dd>
+                    <dt class="col-sm-3">WWW</dt>
+                    <dd class="col-sm-9">{% if facility.website %}<a href="{{ facility.website }}" target="_blank">{{ facility.website }}</a>{% else %}-{% endif %}</dd>
+                    <dt class="col-sm-3">Liczba miejsc</dt>
+                    <dd class="col-sm-9">{{ facility.number_of_places|default:'-' }}</dd>
+                </dl>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Kategorie i klasyfikacje</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>Rodzaje uzależnień:</strong> {{ facility.addiction_types.all|join:', '|default:'-' }}</li>
+                            <li><strong>Typy placówki:</strong> {{ facility.facility_types.all|join:', '|default:'-' }}</li>
+                            <li><strong>Województwa:</strong> {{ facility.voivodeships.all|join:', '|default:'-' }}</li>
+                            <li><strong>Długości programów:</strong> {{ facility.program_lengths.all|join:', '|default:'-' }}</li>
+                            <li><strong>Rodzaje terapii:</strong> {{ facility.therapy_types.all|join:', '|default:'-' }}</li>
+                            <li><strong>Psychoterapie:</strong> {{ facility.psychotherapy_types.all|join:', '|default:'-' }}</li>
+                            <li><strong>Poradnictwa:</strong> {{ facility.counseling_types.all|join:', '|default:'-' }}</li>
+                            <li><strong>Działania dodatkowe:</strong> {{ facility.other_actions.all|join:', '|default:'-' }}</li>
+                            <li><strong>Kłopoty z prawem:</strong> {{ facility.legal_issues.all|join:', '|default:'-' }}</li>
+                            <li><strong>Grupy wiekowe/płeć:</strong> {{ facility.age_gender_groups.all|join:', '|default:'-' }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Opis placówki</h5>
+                        <div>{{ facility.description|linebreaksbr|default:'Brak opisu.' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Ratings Section - UPDATED #}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">Ocena placówki</div>
+            <div class="block-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Średnie oceny użytkowników:</h5>
+                        {% if rating_categories %}
+                            {% for category in rating_categories %}
+                                <p>
+                                    <strong>{{ category.name }}:</strong> 
+                                    {% with avg_rating=average_ratings|get_item:category.slug %}
+                                        {% if avg_rating %}
+                                            <span class="badge bg-primary rounded-pill">{{ avg_rating|floatformat:1 }} / 10</span>
+                                        {% else %}
+                                            <span class="text-muted fst-italic">Brak ocen</span>
+                                        {% endif %}
+                                    {% endwith %}
+                                </p>
+                            {% endfor %}
+                        {% else %}
+                            <p>Brak zdefiniowanych kategorii ocen.</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Oceń placówkę:</h5>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ rating_form.as_p }}
+                            <button type="submit" name="submit_rating" class="btn btn-primary mt-2">Zapisz oceny</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Comments Section - UPDATED #}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">Komentarze</div>
+            <div class="block-body">
+                <h5>Dodaj nowy komentarz</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit" name="submit_comment" class="btn btn-primary mt-2">Dodaj komentarz</button>
+                </form>
+                <hr class="my-4">
+                <h5 class="mb-3">Istniejące komentarze ({{ comments.count }})</h5>
+                {% for comment in comments %}
+                    <div class="comment mb-3">
+                        <p class="mb-1">{{ comment.content|linebreaksbr }}</p>
+                        <small class="text-muted">
+                            Dodany przez: <strong>{{ comment.author.username }}</strong> w dniu {{ comment.created_at|date:"d/m/Y, H:i" }}
+                        </small>
+                    </div>
+                {% empty %}
+                    <p class="text-muted fst-italic">Brak komentarzy. Bądź pierwszy!</p> 
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% else %}
+    <div class="alert alert-warning">Nie znaleziono placówki.</div>
+{% endif %}
+
+{% endblock page_content %}

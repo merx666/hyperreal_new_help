@@ -1,0 +1,323 @@
+/* Przywrócono podstawowe style layoutu z ciemną kolorystyką */
+
+body {
+    background-color: #2F363F; /* Ciemne tło z forum */
+    color: #cccccc; /* Jasny tekst */
+    display: flex; /* Nadal potrzebne dla lepkiej stopki */
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Ograniczenie szerokości kontenera głównego Bootstrapa */
+.container {
+    max-width: 1140px; /* Ograniczenie szerokości na dużych ekranach */
+    flex-grow: 1; /* Pozwalamy kontenerowi rosnąć */
+}
+
+/* Style bloków (ogólne dla sidebar i content) */
+.block {
+    background-color: #353c46; /* Tło bloków */
+    margin-bottom: 15px; /* Margines między blokami */
+    border: 1px solid #404953; /* Ramka bloku */
+    border-radius: 4px; /* Zaokrąglenie rogów */
+}
+
+.sidebar-block {
+    background-color: #3a414b; /* Nieco jaśniejsze tło dla bloku w sidebarze */
+    border-color: #4f5864; /* Dopasowana ramka */
+}
+
+.block-header {
+    background-color: #404953; /* Tło nagłówka bloku */
+    color: #E0E0E0; /* Kolor tekstu nagłówka */
+    padding: 10px 15px; /* Padding nagłówka */
+    border-bottom: 1px solid #404953; /* Ramka pod nagłówkiem */
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    font-size: 1.1em;
+}
+
+.sidebar-block .block-header {
+     background-color: #4f5864; /* Dopasuj do tła sidebar-block */
+     border-bottom: 1px solid #4f5864;
+}
+
+.block-body {
+    padding: 15px;
+}
+
+/* Style dla linków w sidebarze (Bootstrap List Group) */
+.sidebar-block .list-group-item {
+    background-color: transparent;
+    border: none;
+    border-left: 3px solid transparent; /* Lewa krawędź dla efektu hover/active */
+    border-bottom: 1px solid #4f5864; /* Separator */
+    color: #b0b0b0;
+    padding: 12px 15px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out; /* Animacja hover */
+}
+
+.sidebar-block .list-group-item:last-of-type {
+    border-bottom: none;
+}
+
+.sidebar-block .list-group-item-action:hover, 
+.sidebar-block .list-group-item-action:focus {
+    background-color: #454d58;
+    color: #ffffff;
+    border-left: 3px solid #1a73e8; /* Niebieska krawędź hover/active */
+    text-decoration: none;
+}
+
+.sidebar-block .list-group-item.active {
+    background-color: #454d58;
+    color: #ffffff;
+    border-left: 3px solid #1a73e8;
+}
+
+.list-group-item i {
+    color: #999;
+    margin-right: 10px;
+}
+
+.sidebar-block .list-group-item-action:hover i,
+.sidebar-block .list-group-item.active i {
+    color: #ffffff;
+}
+
+/* Style przycisku Zaloguj */
+.btn-hyperreal-one {
+    background-color: #1a4a7e; /* Ciemnoniebieski */
+    border-color: #1a4a7e;
+    color: #fff;
+    padding: 10px 15px;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.btn-hyperreal-one:hover {
+    background-color: #13385f;
+    border-color: #13385f;
+    color: #fff;
+}
+
+/* Style stopki */
+.p-footer {
+    background-color: #252a31; /* Kolor stopki */
+    color: #A0A0A0;
+    padding: 15px 20px;
+    border-top: 1px solid #404953;
+    text-align: right;
+    font-size: 0.9em;
+    margin-top: auto; /* Przykleja stopkę do dołu */
+    flex-shrink: 0;
+}
+
+.p-footer p {
+    margin-bottom: 0;
+}
+
+.p-footer a {
+    color: #cccccc;
+    text-decoration: none;
+}
+
+.p-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Style dla Accordion */
+.accordion {
+    --bs-accordion-border-color: #404953;
+    --bs-accordion-border-radius: 0;
+    --bs-accordion-inner-border-radius: 0;
+    --bs-accordion-btn-padding-x: 1.25rem;
+    --bs-accordion-btn-padding-y: 1rem;
+    --bs-accordion-btn-color: #cccccc;
+    --bs-accordion-btn-bg: #404953;
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23cccccc'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --bs-accordion-btn-icon-transform: rotate(-180deg);
+    --bs-accordion-btn-icon-transition: transform 0.2s ease-in-out;
+    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --bs-accordion-btn-focus-border-color: transparent;
+    --bs-accordion-btn-focus-box-shadow: none;
+    --bs-accordion-body-padding-x: 1.25rem; /* Przywrócono padding body harmonijki */
+    --bs-accordion-body-padding-y: 1rem;
+    --bs-accordion-active-color: #ffffff;
+    --bs-accordion-active-bg: #1a73e8;
+}
+
+.accordion-item {
+    background-color: transparent;
+    border: 1px solid var(--bs-accordion-border-color); /* Przywrócono ramkę elementu */
+    margin-bottom: -1px; /* Usuwamy odstęp między ramkami */
+    border-radius: var(--bs-accordion-border-radius); /* Przywrócono zaokrąglenie */
+}
+
+.accordion-item:first-of-type {
+    border-top-left-radius: var(--bs-accordion-border-radius);
+    border-top-right-radius: var(--bs-accordion-border-radius);
+}
+
+.accordion-item:last-of-type {
+    border-bottom-right-radius: var(--bs-accordion-border-radius);
+    border-bottom-left-radius: var(--bs-accordion-border-radius);
+}
+
+.accordion-item:first-of-type .accordion-button {
+    border-top-left-radius: var(--bs-accordion-inner-border-radius);
+    border-top-right-radius: var(--bs-accordion-inner-border-radius);
+}
+
+.accordion-item:last-of-type .accordion-button.collapsed {
+    border-bottom-right-radius: var(--bs-accordion-inner-border-radius);
+    border-bottom-left-radius: var(--bs-accordion-inner-border-radius);
+}
+
+.accordion-button {
+    border-radius: 0 !important; /* Usuwamy zaokrąglenie z przycisku */
+    font-weight: 500;
+    background-color: var(--bs-accordion-btn-bg); /* Ustawiamy tło na przycisku */
+}
+
+.accordion-button:not(.collapsed) {
+    box-shadow: none;
+    color: var(--bs-accordion-active-color);
+    background-color: var(--bs-accordion-active-bg);
+}
+
+.accordion-button::after {
+  flex-shrink: 0;
+  width: var(--bs-accordion-btn-icon-width);
+  height: var(--bs-accordion-btn-icon-width);
+  margin-left: auto;
+  content: "";
+  background-image: var(--bs-accordion-btn-icon);
+  background-repeat: no-repeat;
+  background-size: var(--bs-accordion-btn-icon-width);
+  transition: var(--bs-accordion-btn-icon-transition);
+}
+
+.accordion-button:not(.collapsed)::after {
+  background-image: var(--bs-accordion-btn-active-icon);
+  transform: var(--bs-accordion-btn-icon-transform);
+}
+
+.accordion-body {
+    background-color: #353c46; /* Tło dla treści harmonijki */
+    /* Usunięto padding: 0; */
+    border-top: 1px solid #404953;
+}
+
+/* Style dla linków wewnątrz harmonijki */
+.accordion-body .list-group {
+    border-radius: 0;
+}
+
+.accordion-body .list-group-item {
+    background-color: transparent;
+    border: none;
+    border-top: 1px solid #454d58;
+    color: #b0b0b0;
+    padding: 12px 20px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.accordion-body .list-group-item:first-child {
+    border-top: none;
+}
+
+.accordion-body .list-group-item-action:hover, 
+.accordion-body .list-group-item-action:focus {
+    background-color: #454d58;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Style przycisku Zaloguj */
+.btn-hyperreal-one {
+    background-color: #1a4a7e; /* Ciemnoniebieski */
+    border-color: #1a4a7e;
+    color: #fff;
+    padding: 10px 15px;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.btn-hyperreal-one:hover {
+    background-color: #13385f;
+    border-color: #13385f;
+    color: #fff;
+}
+
+/* Style stopki */
+.p-footer {
+    background-color: #252a31; /* Kolor stopki */
+    color: #A0A0A0;
+    padding: 15px 20px;
+    border-top: 1px solid #404953;
+    text-align: right;
+    font-size: 0.9em;
+    margin-top: auto; /* Przykleja stopkę do dołu */
+    flex-shrink: 0;
+}
+
+.p-footer p {
+    margin-bottom: 0;
+}
+
+.p-footer a {
+    color: #cccccc;
+    text-decoration: none;
+}
+
+.p-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Style karuzeli */
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    color: #fff;
+}
+
+.carousel-caption a {
+    color: #a7d8ff;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1) grayscale(100);
+}
+
+.carousel-indicators button {
+    background-color: #fff;
+}
+
+/* Poprawki dla elementów Bootstrap w nagłówku */
+f.p-header .btn-outline-light {
+    color: #E0E0E0;
+    border-color: #E0E0E0;
+}
+
+.p-header .btn-outline-light:hover {
+    color: #252a31;
+    background-color: #E0E0E0;
+    border-color: #E0E0E0;
+}
+
+.p-header .form-control {
+    background-color: #404953;
+    border-color: #404953;
+    color: #E0E0E0;
+}
+
+.p-header .form-control::placeholder {
+    color: #A0A0A0;
+}
