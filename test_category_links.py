@@ -1,0 +1,68 @@
+import requests
+
+BASE = "http://127.0.0.1:8000/help/kategorie/"
+
+# (category_type, slug)
+links = [
+    ("rodzaj-uzaleznien", "uzaleznienie-od-alkoholu-hyperreal-help-chcemy-pomoc"),
+    ("rodzaj-uzaleznien", "uzaleznienie-od-narkotykow-hyperreal-help-chcemy-pomoc"),
+    ("grupa-wiekowa-plec", "placowka-adresowana-tylko-do-doroslych-hyperreal-help-chcemy-pomoc"),
+    ("grupa-wiekowa-plec", "placowka-adresowana-tylko-do-kobiet-hyperreal-help-chcemy-pomoc"),
+    ("grupa-wiekowa-plec", "placowka-adresowana-tylko-do-mezczyzn-hyperreal-help-chcemy-pomoc"),
+    ("grupa-wiekowa-plec", "placowka-adresowana-tylko-do-mlodziezy-hyperreal-help-chcemy-pomoc"),
+    ("grupa-wiekowa-plec", "placowka-adresowana-zarowno-do-mlodziezy-jak-i-doroslych-hyperreal-help-chcemy-pomoc"),
+    ("grupa-wiekowa-plec", "placowka-przyjmuje-uzaleznione-matki-z-dziecmi-hyperreal-help-chcemy-pomoc"),
+    ("typ-placowki", "hostel-mieszkanie-dom-readaptacyjny-hyperreal-help-chcemy-pomoc"),
+    ("typ-placowki", "placowka-ambulatoryjna-hyperreal-help-chcemy-pomoc"),
+    ("typ-placowki", "placowka-detoksykacyjna-hyperreal-help-chcemy-pomoc"),
+    ("typ-placowki", "placowka-stacjonarna-hyperreal-help-chcemy-pomoc"),
+    ("dlugosc-programu", "program-dugoterminowy-hyperreal-help-chcemy-pomoc"),
+    ("dlugosc-programu", "program-krotkoterminowy-hyperreal-help-chcemy-pomoc"),
+    ("dlugosc-programu", "program-srednioterminowy-hyperreal-help-chcemy-pomoc"),
+    ("rodzaj-terapii", "model-minnesota-hyperreal-help-chcemy-pomoc"),
+    ("rodzaj-terapii", "spoecznosc-terapeutyczna-hyperreal-help-chcemy-pomoc"),
+    ("rodzaj-terapii", "terapia-grupowa-hyperreal-help-chcemy-pomoc"),
+    ("rodzaj-terapii", "terapia-indywidualna-hyperreal-help-chcemy-pomoc"),
+    ("poradnictwo", "poradnictwo-dla-rodzin-hyperreal-help-chcemy-pomoc"),
+    ("poradnictwo", "poradnictwo-dla-uzaleznionych-hyperreal-help-chcemy-pomoc"),
+    ("psychoterapia", "psychoterapia-rodzin-hyperreal-help-chcemy-pomoc"),
+    ("psychoterapia", "psychoterapia-uzaleznionych-hyperreal-help-chcemy-pomoc"),
+    ("dzialania-prawne", "konsultacje-prawne-hyperreal-help-chcemy-pomoc"),
+    ("dzialania-prawne", "prowadzi-program-dla-osob-skierowanych-w-zwiazku-z-art-72-ust-1-ustawy-o-przeciwdziaaniu-narkomanii-hyperreal-help-chcemy-pomoc"),
+    ("dzialania-prawne", "przyjmuje-osoby-zobowiazane-przez-sad-do-podjecia-leczenia-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "redukcja-szkod-edukacja-i-poradnictwo-dla-osob-niezmotywowanych-do-leczenia-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "swietlica-drop-in-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "wymiana-igie-i-strzykawek-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "zapobieganie-nawrotom-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "podwojna-diagnoza-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "badanie-na-obecnosc-hiv-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "dziaania-pozastacjonarne-streetworking-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "etap-przedrezydencki-nowicjat-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "kierowanie-do-do-hostelu-mieszkania-readaptacyjnego-po-zakonczeniu-terapii-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "kierowanie-na-detoks-do-osrodka-rehabilitacyjnego-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "mozliwosc-kontynuacji-nauki-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "mozliwosc-rozpoznania-dostarczonej-substancji-narkotycznej-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "mozliwosc-wykonania-testu-metabolity-narkotykow-w-moczu-lub-testy-krwi-hyperreal-help-chcemy-pomoc"),
+    ("inne-dzialania", "opieka-duszpasterska-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "dolnoslaskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "kujawsko-pomorskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "lubelskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "lubuskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "mazowieckie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "maopolskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "opolskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "podkarpackie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "podlaskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "pomorskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "slaskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "swietokrzyskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "warminsko-mazurskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "wielkopolskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "zachodniopomorskie-hyperreal-help-chcemy-pomoc"),
+    ("wojewodztwo", "odzkie-hyperreal-help-chcemy-pomoc"),
+]
+
+for cat, slug in links:
+    url = f"{BASE}{cat}/{slug}/"
+    r = requests.get(url)
+    print(f"{url} -> {r.status_code}") 

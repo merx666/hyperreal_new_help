@@ -24,6 +24,9 @@ class Facility(models.Model):
     counseling_types_text = models.TextField(blank=True, null=True)
     other_activities_text = models.TextField(blank=True, null=True)
     last_updated_hyperreal_text = models.CharField(max_length=50, blank=True, null=True)
+    # Współrzędne geograficzne
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # Nowe relacje many-to-many:
@@ -186,3 +189,16 @@ class AgeGenderGroup(models.Model):
     class Meta:
         verbose_name = "Grupa wiekowa/płeć"
         verbose_name_plural = "Grupy wiekowe/płci"
+
+class Newsletter(models.Model):
+    email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.email
+    
+    class Meta:
+        verbose_name = "Newsletter"
+        verbose_name_plural = "Newsletter"

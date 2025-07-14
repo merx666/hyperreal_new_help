@@ -1,0 +1,179 @@
+{% extends 'help_section/help_page.html' %}
+{% load static %}
+
+{% block page_content %}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">
+                <h4><i class="fa fa-search"></i> Zaawansowane wyszukiwanie placówek</h4>
+            </div>
+            <div class="block-body">
+                <!-- Formularz wyszukiwania -->
+                <form method="get" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="q" class="form-label">Słowa kluczowe</label>
+                                <input type="text" class="form-control" id="q" name="q" value="{{ query }}" 
+                                       placeholder="Nazwa placówki, adres, opis...">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="sort" class="form-label">Sortuj według</label>
+                                <select class="form-select" id="sort" name="sort">
+                                    <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Nazwa (A-Z)</option>
+                                    <option value="voivodeship" {% if sort_by == 'voivodeship' %}selected{% endif %}>Województwo</option>
+                                    <option value="type" {% if sort_by == 'type' %}selected{% endif %}>Typ placówki</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="voivodeship" class="form-label">Województwo</label>
+                                <select class="form-select" id="voivodeship" name="voivodeship">
+                                    <option value="">Wszystkie województwa</option>
+                                    {% for v in voivodeships %}
+                                        <option value="{{ v.name }}" {% if voivodeship == v.name %}selected{% endif %}>
+                                            {{ v.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="addiction_type" class="form-label">Typ uzależnienia</label>
+                                <select class="form-select" id="addiction_type" name="addiction_type">
+                                    <option value="">Wszystkie uzależnienia</option>
+                                    {% for at in addiction_types %}
+                                        <option value="{{ at.name }}" {% if addiction_type == at.name %}selected{% endif %}>
+                                            {{ at.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="facility_type" class="form-label">Typ placówki</label>
+                                <select class="form-select" id="facility_type" name="facility_type">
+                                    <option value="">Wszystkie typy</option>
+                                    {% for ft in facility_types %}
+                                        <option value="{{ ft.name }}" {% if facility_type == ft.name %}selected{% endif %}>
+                                            {{ ft.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-search"></i> Wyszukaj
+                            </button>
+                            <a href="{% url 'search_facilities' %}" class="btn btn-outline-secondary ms-2">
+                                <i class="fa fa-times"></i> Wyczyść filtry
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Wyniki wyszukiwania -->
+                {% if query or voivodeship or addiction_type or facility_type %}
+                    <div class="mt-4">
+                        <h5>
+                            {% if facilities %}
+                                Znaleziono {{ facilities|length }} placówkę/placówki
+                            {% else %}
+                                Nie znaleziono placówek
+                            {% endif %}
+                        </h5>
+                        
+                        {% if facilities %}
+                            <div class="list-group">
+                                {% for facility in facilities %}
+                                    <div class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">
+                                                <a href="{% url 'facility_detail' slug=facility.slug %}" class="text-decoration-none">
+                                                    {{ facility.name }}
+                                                </a>
+                                            </h6>
+                                            {% if facility.voivodeship %}
+                                                <small class="text-muted">{{ facility.voivodeship }}</small>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        {% if facility.full_address_text_detail %}
+                                            <p class="mb-1 text-muted">
+                                                <i class="fa fa-map-marker"></i> {{ facility.full_address_text_detail }}
+                                            </p>
+                                        {% endif %}
+                                        
+                                        <div class="mb-2">
+                                            {% if facility.phone_number %}
+                                                <span class="badge bg-light text-dark me-2">
+                                                    <i class="fa fa-phone"></i> {{ facility.phone_number }}
+                                                </span>
+                                            {% endif %}
+                                            {% if facility.email %}
+                                                <span class="badge bg-light text-dark me-2">
+                                                    <i class="fa fa-envelope"></i> {{ facility.email }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Kategorie -->
+                                        <div class="small">
+                                            {% if facility.addiction_types.all %}
+                                                <strong>Uzależnienia:</strong>
+                                                {% for at in facility.addiction_types.all %}
+                                                    <span class="badge bg-primary me-1">{{ at.name }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            
+                                            {% if facility.facility_types.all %}
+                                                <br><strong>Typ placówki:</strong>
+                                                {% for ft in facility.facility_types.all %}
+                                                    <span class="badge bg-success me-1">{{ ft.name }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                <p>Nie znaleziono placówek pasujących do kryteriów wyszukiwania.</p>
+                                <p>Spróbuj:</p>
+                                <ul>
+                                    <li>Zmienić słowa kluczowe</li>
+                                    <li>Usunąć niektóre filtry</li>
+                                    <li>Sprawdzić pisownię</li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <h5><i class="fa fa-info-circle"></i> Jak wyszukiwać?</h5>
+                        <p>Użyj formularza powyżej, aby znaleźć placówki według:</p>
+                        <ul>
+                            <li><strong>Słowa kluczowe</strong> - nazwa placówki, adres, opis</li>
+                            <li><strong>Województwo</strong> - wybierz konkretne województwo</li>
+                            <li><strong>Typ uzależnienia</strong> - alkohol, narkotyki, itp.</li>
+                            <li><strong>Typ placówki</strong> - poradnia, ośrodek, hostel, itp.</li>
+                        </ul>
+                        <p>Możesz łączyć różne filtry, aby zawęzić wyniki.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %} 

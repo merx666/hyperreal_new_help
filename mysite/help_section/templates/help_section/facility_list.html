@@ -6,29 +6,100 @@
         <div class="block-container">
             <div class="block-header">
                 {{ category_name|default:"Placówki" }}
+                {% if facilities_list %}
+                    <span class="badge bg-secondary ms-2">{{ facilities_list|length }} placówek</span>
+                {% endif %}
             </div>
             <div class="block-body">
-                {% for facility in facilities_list %}
-                    <article class="node node-osrodek node-teaser clearfix mb-3">
-                        <header>
-                            <h4><a href="{% url 'facility_detail' slug=facility.slug %}">{{ facility.name }}</a></h4>
-                        </header>
-                        
-                        {% if facility.full_address_text_detail %}
-                            <p class="mb-1"><small><strong>Adres:</strong> {{ facility.full_address_text_detail }}</small></p>
-                        {% elif facility.address_street or facility.address_city %}
-                             <p class="mb-1"><small><strong>Adres:</strong> {{ facility.address_street }}, {{ facility.address_city }}</small></p>
-                        {% endif %}
+                {% if facilities_list %}
+                    <div class="list-group">
+                        {% for facility in facilities_list %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">
+                                        <a href="{% url 'facility_detail' slug=facility.slug %}">{{ facility.name }}</a>
+                                    </h5>
+                                    {% if facility.voivodeship %}
+                                        <small class="text-muted">{{ facility.voivodeship }}</small>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if facility.full_address_text_detail %}
+                                    <p class="mb-1">
+                                        <i class="fa fa-map-marker"></i> {{ facility.full_address_text_detail }}
+                                    </p>
+                                {% elif facility.address_street or facility.address_city %}
+                                    <p class="mb-1">
+                                        <i class="fa fa-map-marker"></i> {{ facility.address_street }}, {{ facility.address_city }}
+                                    </p>
+                                {% endif %}
 
-                        <footer class="mt-2">
-                            <ul class="list-inline small">
-                                <li class="list-inline-item"><a href="{% url 'facility_detail' slug=facility.slug %}">Zobacz szczegóły...</a></li>
-                            </ul>
-                        </footer>
-                    </article>
-                {% empty %}
-                    <p>Nie znaleziono placówek w tej kategorii.</p>
-                {% endfor %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        {% if facility.phone_number %}
+                                            <small class="text-muted me-3">
+                                                <i class="fa fa-phone"></i> {{ facility.phone_number }}
+                                            </small>
+                                        {% endif %}
+                                        {% if facility.email %}
+                                            <small class="text-muted me-3">
+                                                <i class="fa fa-envelope"></i> {{ facility.email }}
+                                            </small>
+                                        {% endif %}
+                                        {% if facility.website %}
+                                            <small class="text-muted">
+                                                <i class="fa fa-globe"></i> <a href="{{ facility.website }}" target="_blank">Strona WWW</a>
+                                            </small>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{% url 'facility_detail' slug=facility.slug %}" class="btn btn-sm btn-outline-primary">
+                                        Szczegóły
+                                    </a>
+                                </div>
+
+                                <!-- Kategorie -->
+                                <div class="mt-2">
+                                    {% if facility.addiction_types.all %}
+                                        <div class="mb-1">
+                                            <small class="text-muted">Uzależnienia:</small>
+                                            {% for addiction_type in facility.addiction_types.all %}
+                                                <span class="badge bg-info me-1">{{ addiction_type.name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if facility.facility_types.all %}
+                                        <div class="mb-1">
+                                            <small class="text-muted">Typ placówki:</small>
+                                            {% for facility_type in facility.facility_types.all %}
+                                                <span class="badge bg-success me-1">{{ facility_type.name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if facility.therapy_types.all %}
+                                        <div class="mb-1">
+                                            <small class="text-muted">Terapia:</small>
+                                            {% for therapy_type in facility.therapy_types.all %}
+                                                <span class="badge bg-warning me-1">{{ therapy_type.name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>Nie znaleziono placówek w tej kategorii.</p>
+                        <p>Spróbuj:</p>
+                        <ul>
+                            <li>Sprawdzić inne kategorie</li>
+                            <li>Użyć wyszukiwania</li>
+                            <li>Przejrzeć alfabetyczny spis placówek</li>
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
