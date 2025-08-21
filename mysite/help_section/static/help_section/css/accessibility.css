@@ -1,0 +1,460 @@
+/* Accessibility Improvements for Hyperreal Help */
+
+/* High Contrast and Focus States */
+:focus {
+    outline: 3px solid #007bff !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25) !important;
+}
+
+/* Skip to main content link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #000;
+    color: #fff;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 9999;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.skip-link:focus {
+    top: 6px;
+    outline: 3px solid #fff;
+}
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.sr-only-focusable:focus {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: inherit !important;
+    margin: inherit !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+}
+
+/* Enhanced button focus states */
+.btn:focus,
+.btn:focus-visible {
+    outline: 3px solid #007bff !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25) !important;
+}
+
+.btn-primary:focus,
+.btn-primary:focus-visible {
+    outline-color: #fff !important;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Enhanced form control focus states */
+.form-control:focus,
+.form-select:focus {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25) !important;
+    outline: none !important;
+}
+
+/* Enhanced link focus states */
+a:focus,
+a:focus-visible {
+    outline: 3px solid #007bff !important;
+    outline-offset: 2px !important;
+    text-decoration: underline !important;
+}
+
+/* Navigation link focus improvements */
+.list-group-item:focus,
+.list-group-item:focus-visible {
+    background-color: rgba(0, 123, 255, 0.1) !important;
+    border-color: #007bff !important;
+    outline: 3px solid #007bff !important;
+    outline-offset: 2px !important;
+}
+
+/* Breadcrumb accessibility */
+.breadcrumb-item + .breadcrumb-item::before {
+    content: ">" !important;
+    color: #6c757d;
+    font-weight: bold;
+}
+
+/* Enhanced table accessibility */
+table {
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    text-align: left;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+}
+
+td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+}
+
+/* Enhanced form labels */
+label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Required field indicators */
+.required::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Error message styling */
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
+}
+
+/* Success message styling */
+.success-message {
+    color: #198754;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.form-control.is-valid {
+    border-color: #198754;
+    box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.25);
+}
+
+/* Enhanced modal accessibility */
+.modal:focus {
+    outline: none;
+}
+
+.modal-header .btn-close:focus {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Enhanced dropdown accessibility */
+.dropdown-menu {
+    border: 2px solid #dee2e6;
+}
+
+.dropdown-item:focus,
+.dropdown-item:focus-visible {
+    background-color: #007bff;
+    color: #fff;
+    outline: none;
+}
+
+/* Enhanced pagination accessibility */
+.page-link:focus,
+.page-link:focus-visible {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+    z-index: 3;
+}
+
+/* Enhanced card accessibility */
+.card:focus-within {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Enhanced alert accessibility */
+.alert {
+    border-left: 4px solid;
+}
+
+.alert-success {
+    border-left-color: #198754;
+}
+
+.alert-danger {
+    border-left-color: #dc3545;
+}
+
+.alert-warning {
+    border-left-color: #ffc107;
+}
+
+.alert-info {
+    border-left-color: #0dcaf0;
+}
+
+/* Enhanced rating stars accessibility */
+.rating-stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.rating-stars .fa-star {
+    font-size: 1rem;
+    color: #ffc107;
+}
+
+.rating-stars .fa-star-o {
+    font-size: 1rem;
+    color: #dee2e6;
+}
+
+/* Enhanced notification badge accessibility */
+.notification-badge {
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+/* Enhanced search form accessibility */
+.search-form fieldset {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.search-form legend {
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
+    width: auto;
+}
+
+/* Enhanced facility card accessibility */
+.facility-card {
+    transition: all 0.2s ease-in-out;
+}
+
+.facility-card:hover,
+.facility-card:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.facility-card .card-title a:focus {
+    text-decoration: underline;
+}
+
+/* Enhanced map accessibility */
+.map-container {
+    position: relative;
+}
+
+.map-container::before {
+    content: "Mapa interaktywna placówek. Użyj klawiatury Tab aby nawigować po markerach.";
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+.map-container:focus-within::before {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    z-index: 1000;
+}
+
+/* Enhanced comment form accessibility */
+.comment-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.comment-form .form-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+/* Enhanced loading states */
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.loading::after {
+    content: "Ładowanie...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .btn {
+        border-width: 2px;
+    }
+    
+    .form-control,
+    .form-select {
+        border-width: 2px;
+    }
+    
+    .card {
+        border-width: 2px;
+    }
+    
+    .alert {
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .facility-card:hover,
+    .facility-card:focus-within {
+        transform: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    .skip-link,
+    .btn,
+    .navbar,
+    .sidebar,
+    .pagination,
+    .modal {
+        display: none !important;
+    }
+    
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+    
+    .facility-card {
+        break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Enhanced keyboard navigation for custom components */
+.custom-select:focus {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+.custom-checkbox input:focus + label::before {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+.custom-radio input:focus + label::before {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Enhanced tooltip accessibility */
+.tooltip {
+    font-size: 0.875rem;
+    max-width: 200px;
+}
+
+[data-bs-toggle="tooltip"]:focus {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Enhanced carousel accessibility */
+.carousel-control-prev:focus,
+.carousel-control-next:focus {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+.carousel-indicators button:focus {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Enhanced tab accessibility */
+.nav-tabs .nav-link:focus,
+.nav-pills .nav-link:focus {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Enhanced accordion accessibility */
+.accordion-button:focus {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* Enhanced progress bar accessibility */
+.progress {
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+}
+
+.progress-bar {
+    transition: width 0.3s ease;
+}
+
+/* Enhanced badge accessibility */
+.badge {
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+/* Enhanced close button accessibility */
+.btn-close:focus {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+    box-shadow: none;
+}

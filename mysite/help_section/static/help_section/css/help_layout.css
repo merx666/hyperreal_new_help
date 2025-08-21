@@ -1,11 +1,28 @@
 /* Przywrócono podstawowe style layoutu z ciemną kolorystyką */
 
+/* Global animations and transitions */
+* {
+    transition: all 0.3s ease;
+}
+
 body {
     background-color: #2F363F; /* Ciemne tło z forum */
     color: #cccccc; /* Jasny tekst */
     display: flex; /* Nadal potrzebne dla lepkiej stopki */
     flex-direction: column;
     min-height: 100vh;
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* Fade in animation for page load */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
 }
 
 /* Ograniczenie szerokości kontenera głównego Bootstrapa */
@@ -20,6 +37,14 @@ body {
     margin-bottom: 15px; /* Margines między blokami */
     border: 1px solid #404953; /* Ramka bloku */
     border-radius: 4px; /* Zaokrąglenie rogów */
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.block:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .sidebar-block {
@@ -129,6 +154,565 @@ body {
     text-decoration: underline;
 }
 
+/* Enhanced Rating and Comments Styles */
+.rating-category {
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.rating-category:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.rating-stars i {
+    font-size: 1.1em;
+    margin-right: 2px;
+}
+
+.rating-form-container {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rating-form-fields input[type="number"] {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    width: 100%;
+}
+
+.rating-form-fields label {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+/* Comment Styles */
+.add-comment-section {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.comment-form-fields textarea {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+}
+
+.comment-form-fields label {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.comment-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.3s ease;
+}
+
+.comment-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.avatar-circle {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.comment-meta h6 {
+    color: #fff;
+}
+
+.comment-content p {
+    color: #e0e0e0;
+    line-height: 1.6;
+}
+
+.no-comments {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+}
+
+/* Form improvements */
+.btn-primary, .btn-success {
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover, .btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Badge improvements */
+.badge {
+    font-size: 0.75em;
+    padding: 0.4em 0.6em;
+}
+
+/* Bootstrap Cards - Dark Theme */
+.card {
+    background-color: #353c46;
+    border: 1px solid #404953;
+    color: #cccccc;
+}
+
+.card-header {
+    background-color: #404953;
+    border-bottom: 1px solid #4f5864;
+    color: #E0E0E0;
+}
+
+.card-body {
+    background-color: #353c46;
+    color: #cccccc;
+}
+
+.card-footer {
+    background-color: #404953;
+    border-top: 1px solid #4f5864;
+    color: #cccccc;
+}
+
+.card-title {
+    color: #ffffff;
+}
+
+.card-title a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.card-title a:hover {
+    color: #1a73e8;
+}
+
+.card-text {
+    color: #cccccc;
+}
+
+/* Alert styles for dark theme */
+.alert {
+    border: 1px solid;
+}
+
+.alert-info {
+    background-color: rgba(26, 115, 232, 0.1);
+    border-color: rgba(26, 115, 232, 0.3);
+    color: #87ceeb;
+}
+
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-color: rgba(255, 193, 7, 0.3);
+    color: #ffd700;
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    border-color: rgba(40, 167, 69, 0.3);
+    color: #90ee90;
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: rgba(220, 53, 69, 0.3);
+    color: #ff6b6b;
+}
+
+/* Enhanced Responsive Design */
+
+/* Mobile First - Extra Small devices (phones, 576px and down) */
+@media (max-width: 575.98px) {
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .block {
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+    
+    .block-header {
+        padding: 8px 12px;
+        font-size: 1em;
+    }
+    
+    .block-body {
+        padding: 12px;
+    }
+    
+    /* Navigation improvements */
+    .navbar-nav {
+        text-align: center;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Search form */
+    .form-control {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    /* Rating system mobile */
+    .rating-category {
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+    
+    .rating-stars {
+        justify-content: center;
+        margin: 0.5rem 0;
+    }
+    
+    .rating-form-container {
+        margin-top: 1.5rem;
+        padding: 1rem;
+    }
+    
+    .rating-form-fields {
+        margin-bottom: 1rem;
+    }
+    
+    .rating-form-fields input[type="number"] {
+        font-size: 16px;
+        padding: 12px;
+    }
+    
+    /* Comments mobile */
+    .comment-item {
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+    
+    .comment-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.5rem;
+    }
+    
+    .user-avatar {
+        margin-bottom: 0;
+    }
+    
+    .comment-form-fields textarea {
+        font-size: 16px;
+        padding: 12px;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 12px 20px;
+        font-size: 16px;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-group .btn {
+        width: auto;
+    }
+    
+    /* Tables */
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    /* Cards */
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .rating-category {
+        margin-bottom: 1rem;
+    }
+    
+    .rating-form-container {
+        margin-top: 2rem;
+    }
+    
+    .comment-header {
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .btn {
+        width: auto;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .container {
+        max-width: 720px;
+    }
+    
+    /* Sidebar adjustments */
+    .sidebar-block {
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Rating system tablet */
+    .rating-category {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+    }
+    
+    .rating-stars {
+        margin: 0;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .btn, .list-group-item-action {
+        min-height: 44px; /* Apple's recommended touch target size */
+    }
+    
+    .rating-stars i {
+        font-size: 1.5em;
+        padding: 0.25rem;
+    }
+    
+    .accordion-button {
+        min-height: 48px;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .avatar-circle {
+        border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (max-height: 500px) {
+    .navbar {
+        padding: 0.25rem 1rem;
+    }
+    
+    .block-header {
+        padding: 8px 15px;
+    }
+    
+    .block-body {
+        padding: 10px 15px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .sidebar-block,
+    .navbar,
+    .p-footer,
+    .btn {
+        display: none !important;
+    }
+    
+    .container {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .block {
+        border: 1px solid #000;
+        margin-bottom: 1rem;
+        break-inside: avoid;
+    }
+    
+    .block-header {
+        background-color: #f5f5f5 !important;
+        color: #000 !important;
+    }
+    
+    body {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+}
+
+/* Additional custom styles can be added here */
+
+/* Accordion styles */
+.accordion-button {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    font-weight: 500;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #e9ecef;
+    color: #0c63e4;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.accordion-body {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    padding: 1.5rem;
+}
+
+/* Advanced search filters */
+.advanced-filters {
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.filter-section {
+    margin-bottom: 1.5rem;
+}
+
+.filter-section:last-child {
+    margin-bottom: 0;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-select {
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-select:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Search results enhancements */
+.search-results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.results-count {
+    font-weight: 500;
+    color: #495057;
+}
+
+.list-group-item {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    margin-bottom: 0.75rem;
+    padding: 1rem;
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.list-group-item:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.facility-name {
+    font-weight: 600;
+    color: #0c63e4;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.facility-name:hover {
+    color: #0a58ca;
+    text-decoration: underline;
+}
+
+.facility-location {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.contact-badges {
+    margin-bottom: 0.75rem;
+}
+
+.contact-badges .badge {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.category-badges {
+    margin-top: 0.5rem;
+}
+
+.category-badges .badge {
+    font-size: 0.75rem;
+    margin-right: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+/* Rating display in search results */
+.facility-rating {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #ffc107;
+    margin-left: 0.5rem;
+}
+
+.facility-rating .rating-value {
+    color: #495057;
+    font-weight: 500;
+    margin-left: 0.25rem;
+}
+
 /* Style dla Accordion */
 .accordion {
     --bs-accordion-border-color: #404953;
@@ -181,6 +765,7 @@ body {
     border-radius: 0 !important; /* Usuwamy zaokrąglenie z przycisku */
     font-weight: 500;
     background-color: var(--bs-accordion-btn-bg); /* Ustawiamy tło na przycisku */
+    color: var(--bs-accordion-btn-color) !important; /* Zapewniamy widoczność tekstu */
 }
 
 .accordion-button:not(.collapsed) {
@@ -294,6 +879,101 @@ body {
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     filter: invert(1) grayscale(100);
+}
+
+/* Button animations and hover effects */
+.btn {
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn:active {
+    transform: translateY(0);
+    transition: all 0.1s ease;
+}
+
+/* Form input animations */
+.form-control {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    animation: inputFocus 0.3s ease;
+}
+
+@keyframes inputFocus {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* Link hover animations */
+a {
+    transition: color 0.3s ease;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+/* Fade in animation for dynamic content */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in-up {
+    animation: slideInUp 0.5s ease;
+}
+
+/* Pulse animation for notifications */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Card hover effects */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Smooth transitions for modals */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+    transform: none;
 }
 
 .carousel-indicators button {

@@ -5,10 +5,10 @@
     <div class="block mb-4">
         <div class="block-container">
             <div class="block-header">
-                <h4><i class="fa fa-question-circle"></i> Często zadawane pytania (FAQ)</h4>
+                <h4><i class="fa fa-question-circle" aria-hidden="true"></i> Często zadawane pytania (FAQ)</h4>
             </div>
             <div class="block-body">
-                <div class="accordion" id="faqAccordion">
+                <div class="accordion" id="faqAccordion" role="tablist" aria-label="Lista często zadawanych pytań">
                     {% for faq in faq_data %}
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="faq{{ forloop.counter }}">
@@ -34,12 +34,12 @@
                 
                 <div class="mt-4">
                     <div class="alert alert-info">
-                        <h5><i class="fa fa-info-circle"></i> Nie znalazłeś odpowiedzi?</h5>
+                        <h5><i class="fa fa-info-circle" aria-hidden="true"></i> Nie znalazłeś odpowiedzi?</h5>
                         <p>Jeśli masz pytanie, na które nie ma odpowiedzi powyżej, możesz:</p>
                         <ul>
-                            <li>Użyć <a href="{% url 'search_facilities' %}">zaawansowanego wyszukiwania</a> placówek</li>
-                            <li>Sprawdzić <a href="{% url 'facility_categories' %}">kategorie placówek</a></li>
-                            <li>Przejrzeć <a href="{% url 'facility_map' %}">mapę placówek</a></li>
+                            <li>Użyć <a href="{% url 'search_facilities' %}" aria-label="Przejdź do zaawansowanego wyszukiwania placówek">zaawansowanego wyszukiwania</a> placówek</li>
+                            <li>Sprawdzić <a href="{% url 'facility_categories' %}" aria-label="Przejdź do kategorii placówek">kategorie placówek</a></li>
+                            <li>Przejrzeć <a href="{% url 'facility_map' %}" aria-label="Przejdź do mapy placówek">mapę placówek</a></li>
                             <li>Skontaktować się z nami przez formularz kontaktowy</li>
                         </ul>
                     </div>
@@ -47,4 +47,4 @@
             </div>
         </div>
     </div>
-{% endblock %} 
+{% endblock %}

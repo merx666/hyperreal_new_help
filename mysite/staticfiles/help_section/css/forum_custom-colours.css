@@ -20,3 +20,178 @@ select, input.inputbox {padding-top: 0.75rem; padding-bottom: 0.75rem;}
                 box-shadow: 0 0 0 8px rgba(102, 102, 102, 0);
         }
 }
+
+/* --- Poprawa widoczności breadcrumbs (górna nawigacja) --- */
+.breadcrumb {
+    background: rgba(40, 40, 40, 0.95);
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    color: #f1f1f1;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.breadcrumb a {
+    color: #7ecfff;
+    text-decoration: underline;
+}
+.breadcrumb .active {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* --- Badge i oceny --- */
+.badge, .badge.bg-primary, .badge.bg-info, .badge.bg-success, .badge.bg-warning, .badge.bg-secondary {
+    color: #222 !important;
+    background: #ffe066 !important;
+    font-weight: 600;
+    border-radius: 0.5em;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+}
+.badge.bg-primary {
+    background: #7ecfff !important;
+    color: #222 !important;
+}
+.badge.bg-success {
+    background: #b6fcd5 !important;
+    color: #222 !important;
+}
+.badge.bg-info {
+    background: #b6e0fc !important;
+    color: #222 !important;
+}
+.badge.bg-warning {
+    background: #ffe066 !important;
+    color: #222 !important;
+}
+.badge.bg-secondary {
+    background: #bdbdbd !important;
+    color: #222 !important;
+}
+
+/* --- Średnie oceny i teksty ocen --- */
+.badge.rounded-pill {
+    background: #7ecfff !important;
+    color: #222 !important;
+    font-weight: 700;
+}
+.text-muted, .fst-italic {
+    color: #e0e0e0 !important;
+}
+
+/* --- Poprawa widoczności bloków i nagłówków --- */
+.block-header, .block-body h5, .block-body h4, .block-body h3 {
+    color: #fff !important;
+}
+
+/* --- Drobne poprawki dla przycisków --- */
+.btn-primary, .btn-outline-primary {
+    background: #7ecfff;
+    color: #222;
+    border: none;
+    font-weight: 600;
+}
+.btn-primary:hover, .btn-outline-primary:hover {
+    background: #4bb3fa;
+    color: #fff;
+}
+
+/* --- Tło sekcji --- */
+.block-container {
+    background: #23272b !important;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+
+/* --- Poprawa widoczności inputów i selectów --- */
+.form-control, .form-select {
+    background: #181a1b;
+    color: #fff;
+    border: 1px solid #444;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #7ecfff;
+    box-shadow: 0 0 0 2px #7ecfff33;
+}
+
+/* --- Poprawa widoczności linków --- */
+a, .block-header a {
+    color: #7ecfff;
+    text-decoration: underline;
+}
+a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* --- Poprawa widoczności alfabetycznego spisu placówek --- */
+.list-group-item {
+    background: #292d32 !important;
+    border: 1px solid #393e46 !important;
+    color: #f1f1f1 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+}
+.list-group-item a, .list-group-item .text-muted {
+    color: #b6e0fc !important;
+}
+.list-group-item .text-muted {
+    opacity: 1 !important;
+    font-weight: 500;
+}
+.badge.bg-secondary, .btn.btn-sm.btn-outline-primary, .btn.btn-sm.btn-primary {
+    background: #7ecfff !important;
+    color: #222 !important;
+    font-weight: 700;
+    border: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+}
+.btn.btn-sm.btn-outline-primary.active, .btn.btn-sm.btn-primary.active {
+    background: #4bb3fa !important;
+    color: #fff !important;
+}
+/* Nagłówki liter */
+.block-header, .block-header h4, .block-header h5 {
+    color: #fff !important;
+    letter-spacing: 0.03em;
+}
+/* Poprawa widoczności ikon */
+.fa, .fa-map-marker, .fa-phone, .fa-envelope {
+    color: #7ecfff !important;
+}
+
+/* --- Poprawa widoczności sekcji filtrów na mapie placówek (dark mode) --- */
+.filter-section {
+    background: #23272b !important;
+    color: #f1f1f1 !important;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.filter-section h6 {
+    color: #7ecfff !important;
+    font-weight: 600;
+}
+.form-check-label {
+    color: #e0e0e0 !important;
+    font-weight: 500;
+}
+.form-check-input[type="checkbox"] {
+    background-color: #181a1b;
+    border: 1.5px solid #7ecfff;
+    accent-color: #7ecfff;
+}
+.form-check-input:checked {
+    background-color: #7ecfff !important;
+    border-color: #7ecfff !important;
+}
+.filter-section .btn, .filter-section .btn-outline-secondary, .filter-section .btn-primary {
+    background: #181a1b !important;
+    color: #7ecfff !important;
+    border: 1px solid #7ecfff !important;
+    font-weight: 600;
+}
+.filter-section .btn:hover {
+    background: #7ecfff !important;
+    color: #222 !important;
+}

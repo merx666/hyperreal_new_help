@@ -1,40 +1,54 @@
 {% extends 'help_section/help_page.html' %}
 {% load static %}
+{% load rating_filters %}
+
+{% block extra_head %}
+    <meta name="description" content="Wyszukiwanie placówek leczenia uzależnień{% if query %} - wyniki dla: {{ query }}{% endif %}. Znajdź odpowiednią placówkę terapeutyczną w Polsce.">
+    <meta name="keywords" content="wyszukiwanie placówek, leczenie uzależnień, placówki odwykowe, terapia uzależnień{% if query %}, {{ query }}{% endif %}">
+    <meta property="og:title" content="Wyszukiwanie placówek{% if query %} - {{ query }}{% endif %} - Hyperreal Help">
+    <meta property="og:description" content="Wyniki wyszukiwania placówek leczenia uzależnień{% if query %} dla zapytania: {{ query }}{% endif %}">
+    <title>Wyszukiwanie placówek{% if query %} - {{ query }}{% endif %} - Hyperreal Help</title>
+{% endblock %}
 
 {% block page_content %}
     <div class="block mb-4">
         <div class="block-container">
             <div class="block-header">
-                <h4><i class="fa fa-search"></i> Zaawansowane wyszukiwanie placówek</h4>
+                <h4><i class="fa fa-search" aria-hidden="true"></i> Zaawansowane wyszukiwanie placówek</h4>
             </div>
             <div class="block-body">
                 <!-- Formularz wyszukiwania -->
-                <form method="get" class="mb-4">
+                <form method="get" class="mb-4" role="search" aria-label="Formularz zaawansowanego wyszukiwania placówek">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="mb-3">
                                 <label for="q" class="form-label">Słowa kluczowe</label>
                                 <input type="text" class="form-control" id="q" name="q" value="{{ query }}" 
-                                       placeholder="Nazwa placówki, adres, opis...">
+                                       placeholder="Nazwa placówki, adres, opis, terapie, programy..." 
+                                       aria-label="Wpisz słowa kluczowe do wyszukiwania placówek">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="sort" class="form-label">Sortuj według</label>
-                                <select class="form-select" id="sort" name="sort">
+                                <select class="form-select" id="sort" name="sort" aria-label="Wybierz sposób sortowania wyników">
                                     <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Nazwa (A-Z)</option>
                                     <option value="voivodeship" {% if sort_by == 'voivodeship' %}selected{% endif %}>Województwo</option>
                                     <option value="type" {% if sort_by == 'type' %}selected{% endif %}>Typ placówki</option>
+                                    <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Najwyżej oceniane</option>
+                                    <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Najnowsze</option>
+                                    <option value="updated" {% if sort_by == 'updated' %}selected{% endif %}>Ostatnio aktualizowane</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     
+                    <!-- Podstawowe filtry -->
                     <div class="row">
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="voivodeship" class="form-label">Województwo</label>
-                                <select class="form-select" id="voivodeship" name="voivodeship">
+                                <select class="form-select" id="voivodeship" name="voivodeship" aria-label="Wybierz województwo do filtrowania">
                                     <option value="">Wszystkie województwa</option>
                                     {% for v in voivodeships %}
                                         <option value="{{ v.name }}" {% if voivodeship == v.name %}selected{% endif %}>
@@ -47,7 +61,7 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="addiction_type" class="form-label">Typ uzależnienia</label>
-                                <select class="form-select" id="addiction_type" name="addiction_type">
+                                <select class="form-select" id="addiction_type" name="addiction_type" aria-label="Wybierz typ uzależnienia do filtrowania">
                                     <option value="">Wszystkie uzależnienia</option>
                                     {% for at in addiction_types %}
                                         <option value="{{ at.name }}" {% if addiction_type == at.name %}selected{% endif %}>
@@ -60,7 +74,7 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="facility_type" class="form-label">Typ placówki</label>
-                                <select class="form-select" id="facility_type" name="facility_type">
+                                <select class="form-select" id="facility_type" name="facility_type" aria-label="Wybierz typ placówki do filtrowania">
                                     <option value="">Wszystkie typy</option>
                                     {% for ft in facility_types %}
                                         <option value="{{ ft.name }}" {% if facility_type == ft.name %}selected{% endif %}>
@@ -72,20 +86,113 @@
                         </div>
                     </div>
                     
+                    <!-- Zaawansowane filtry -->
+                    <div class="accordion mb-3" id="advancedFilters">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingAdvanced">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced">
+                                    <i class="fa fa-filter me-2" aria-hidden="true"></i> Filtry zaawansowane
+                                </button>
+                            </h2>
+                            <div id="collapseAdvanced" class="accordion-collapse collapse" 
+                                 aria-labelledby="headingAdvanced" data-bs-parent="#advancedFilters">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="therapy_type" class="form-label">Rodzaj terapii</label>
+                                                <select class="form-select" id="therapy_type" name="therapy_type" aria-label="Wybierz rodzaj terapii do filtrowania">
+                                                    <option value="">Wszystkie terapie</option>
+                                                    {% for tt in therapy_types %}
+                                                        <option value="{{ tt.name }}" {% if therapy_type == tt.name %}selected{% endif %}>
+                                                            {{ tt.name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="program_length" class="form-label">Długość programu</label>
+                                                <select class="form-select" id="program_length" name="program_length" aria-label="Wybierz długość programu do filtrowania">
+                                                    <option value="">Wszystkie długości</option>
+                                                    {% for pl in program_lengths %}
+                                                        <option value="{{ pl.name }}" {% if program_length == pl.name %}selected{% endif %}>
+                                                            {{ pl.name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="age_gender_group" class="form-label">Grupa docelowa</label>
+                                                <select class="form-select" id="age_gender_group" name="age_gender_group" aria-label="Wybierz grupę docelową do filtrowania">
+                                                    <option value="">Wszystkie grupy</option>
+                                                    {% for agg in age_gender_groups %}
+                                                        <option value="{{ agg.name }}" {% if age_gender_group == agg.name %}selected{% endif %}>
+                                                            {{ agg.name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label for="min_rating" class="form-label">Minimalna ocena</label>
+                                                <select class="form-select" id="min_rating" name="min_rating" aria-label="Wybierz minimalną ocenę do filtrowania">
+                                                    <option value="">Wszystkie oceny</option>
+                                                    <option value="4.5" {% if min_rating == '4.5' %}selected{% endif %}>4.5+ ⭐⭐⭐⭐⭐</option>
+                                                    <option value="4.0" {% if min_rating == '4.0' %}selected{% endif %}>4.0+ ⭐⭐⭐⭐</option>
+                                                    <option value="3.5" {% if min_rating == '3.5' %}selected{% endif %}>3.5+ ⭐⭐⭐</option>
+                                                    <option value="3.0" {% if min_rating == '3.0' %}selected{% endif %}>3.0+ ⭐⭐</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label for="has_email" class="form-label">Kontakt email</label>
+                                                <select class="form-select" id="has_email" name="has_email" aria-label="Filtruj według dostępności kontaktu email">
+                                                    <option value="">Bez znaczenia</option>
+                                                    <option value="true" {% if has_email == 'true' %}selected{% endif %}>Dostępny email</option>
+                                                    <option value="false" {% if has_email == 'false' %}selected{% endif %}>Brak emaila</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label for="has_website" class="form-label">Strona internetowa</label>
+                                                <select class="form-select" id="has_website" name="has_website" aria-label="Filtruj według dostępności strony internetowej">
+                                                    <option value="">Bez znaczenia</option>
+                                                    <option value="true" {% if has_website == 'true' %}selected{% endif %}>Ma stronę WWW</option>
+                                                    <option value="false" {% if has_website == 'false' %}selected{% endif %}>Brak strony WWW</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i> Wyszukaj
+                            <button type="submit" class="btn btn-primary" aria-label="Rozpocznij wyszukiwanie placówek">
+                                <i class="fa fa-search" aria-hidden="true"></i> Wyszukaj
                             </button>
-                            <a href="{% url 'search_facilities' %}" class="btn btn-outline-secondary ms-2">
-                                <i class="fa fa-times"></i> Wyczyść filtry
+                            <a href="{% url 'search_facilities' %}" class="btn btn-outline-secondary ms-2" aria-label="Wyczyść wszystkie filtry wyszukiwania">
+                                <i class="fa fa-times" aria-hidden="true"></i> Wyczyść filtry
                             </a>
                         </div>
                     </div>
                 </form>
 
                 <!-- Wyniki wyszukiwania -->
-                {% if query or voivodeship or addiction_type or facility_type %}
+                {% if query or voivodeship or addiction_type or facility_type or therapy_type or program_length or age_gender_group or has_email or has_website or min_rating %}
                     <div class="mt-4">
                         <h5>
                             {% if facilities %}
@@ -96,53 +203,91 @@
                         </h5>
                         
                         {% if facilities %}
-                            <div class="list-group">
+                            <div class="list-group" role="list" aria-label="Lista znalezionych placówek">
                                 {% for facility in facilities %}
-                                    <div class="list-group-item">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1">
-                                                <a href="{% url 'facility_detail' slug=facility.slug %}" class="text-decoration-none">
-                                                    {{ facility.name }}
-                                                </a>
-                                            </h6>
+                                    <div class="list-group-item" role="listitem">
+                                        <div class="d-flex w-100 justify-content-between align-items-start">
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">
+                                                    <a href="{% url 'facility_detail' slug=facility.slug %}" class="facility-name" aria-label="Szczegóły placówki: {{ facility.name }}">
+                                                        {{ facility.name }}
+                                                    </a>
+                                                    {% with avg_rating=facility|avg_rating %}
+                                                        {% if avg_rating > 0 %}
+                                                            <span class="facility-rating" role="img" aria-label="Średnia ocena: {{ avg_rating }} na 5, na podstawie {{ facility|rating_count }} ocen">
+                                                                <span aria-hidden="true">{{ facility|avg_rating|rating_stars }}</span>
+                                                                <span class="rating-value">({{ avg_rating }})</span>
+                                                                <small class="text-muted">({{ facility|rating_count }} ocen)</small>
+                                                            </span>
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                </h6>
+                                            </div>
                                             {% if facility.voivodeship %}
                                                 <small class="text-muted">{{ facility.voivodeship }}</small>
                                             {% endif %}
                                         </div>
                                         
                                         {% if facility.full_address_text_detail %}
-                                            <p class="mb-1 text-muted">
-                                                <i class="fa fa-map-marker"></i> {{ facility.full_address_text_detail }}
+                                            <p class="facility-location">
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i> {{ facility.full_address_text_detail }}
                                             </p>
                                         {% endif %}
                                         
-                                        <div class="mb-2">
+                                        {% if facility.description %}
+                                            <p class="text-muted mb-2" style="font-size: 0.9rem;">
+                                                {{ facility.description|truncatewords:20 }}
+                                            </p>
+                                        {% endif %}
+                                        
+                                        <div class="contact-badges mb-2">
                                             {% if facility.phone_number %}
                                                 <span class="badge bg-light text-dark me-2">
-                                                    <i class="fa fa-phone"></i> {{ facility.phone_number }}
+                                                    <i class="fa fa-phone" aria-hidden="true"></i> {{ facility.phone_number }}
                                                 </span>
                                             {% endif %}
                                             {% if facility.email %}
                                                 <span class="badge bg-light text-dark me-2">
-                                                    <i class="fa fa-envelope"></i> {{ facility.email }}
+                                                    <i class="fa fa-envelope" aria-hidden="true"></i> {{ facility.email }}
+                                                </span>
+                                            {% endif %}
+                                            {% if facility.website %}
+                                                <span class="badge bg-light text-dark me-2">
+                                                    <i class="fa fa-globe" aria-hidden="true"></i> Strona WWW
                                                 </span>
                                             {% endif %}
                                         </div>
                                         
                                         <!-- Kategorie -->
-                                        <div class="small">
+                                        <div class="category-badges">
                                             {% if facility.addiction_types.all %}
-                                                <strong>Uzależnienia:</strong>
-                                                {% for at in facility.addiction_types.all %}
-                                                    <span class="badge bg-primary me-1">{{ at.display_name }}</span>
-                                                {% endfor %}
+                                                <div class="mb-1">
+                                                    <small class="text-muted fw-bold">Uzależnienia:</small>
+                                                    {% for at in facility.addiction_types.all %}
+                                                        <span class="badge bg-primary me-1">{{ at.display_name }}</span>
+                                                    {% endfor %}
+                                                </div>
                                             {% endif %}
                                             
                                             {% if facility.facility_types.all %}
-                                                <br><strong>Typ placówki:</strong>
-                                                {% for ft in facility.facility_types.all %}
-                                                    <span class="badge bg-success me-1">{{ ft.display_name }}</span>
-                                                {% endfor %}
+                                                <div class="mb-1">
+                                                    <small class="text-muted fw-bold">Typ placówki:</small>
+                                                    {% for ft in facility.facility_types.all %}
+                                                        <span class="badge bg-success me-1">{{ ft.display_name }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                            
+                                            {% if facility.therapy_types.all %}
+                                                <div class="mb-1">
+                                                    <small class="text-muted fw-bold">Terapie:</small>
+                                                    {% for tt in facility.therapy_types.all|slice:":3" %}
+                                                        <span class="badge bg-info me-1">{{ tt.display_name }}</span>
+                                                    {% endfor %}
+                                                    {% if facility.therapy_types.all|length > 3 %}
+                                                        <span class="badge bg-secondary">+{{ facility.therapy_types.all|length|add:"-3" }} więcej</span>
+                                                    {% endif %}
+                                                </div>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -162,18 +307,19 @@
                     </div>
                 {% else %}
                     <div class="alert alert-info">
-                        <h5><i class="fa fa-info-circle"></i> Jak wyszukiwać?</h5>
+                        <h5><i class="fa fa-info-circle" aria-hidden="true"></i> Jak wyszukiwać?</h5>
                         <p>Użyj formularza powyżej, aby znaleźć placówki według:</p>
                         <ul>
-                            <li><strong>Słowa kluczowe</strong> - nazwa placówki, adres, opis</li>
-                            <li><strong>Województwo</strong> - wybierz konkretne województwo</li>
-                            <li><strong>Typ uzależnienia</strong> - alkohol, narkotyki, itp.</li>
-                            <li><strong>Typ placówki</strong> - poradnia, ośrodek, hostel, itp.</li>
+                            <li><strong>Słowa kluczowe</strong> - nazwa placówki, adres, opis, terapie, programy</li>
+                            <li><strong>Podstawowe filtry</strong> - województwo, typ uzależnienia, typ placówki</li>
+                            <li><strong>Filtry zaawansowane</strong> - rodzaj terapii, długość programu, grupa docelowa</li>
+                            <li><strong>Filtry jakości</strong> - minimalna ocena, dostępność kontaktu</li>
+                            <li><strong>Sortowanie</strong> - według nazwy, województwa, ocen, daty dodania</li>
                         </ul>
-                        <p>Możesz łączyć różne filtry, aby zawęzić wyniki.</p>
+                        <p>Możesz łączyć różne filtry, aby zawęzić wyniki. Użyj filtrów zaawansowanych dla precyzyjniejszego wyszukiwania.</p>
                     </div>
                 {% endif %}
             </div>
         </div>
     </div>
-{% endblock %} 
+{% endblock %}

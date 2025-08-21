@@ -12,11 +12,14 @@
     <link type="text/css" rel="stylesheet" href="{% static 'help_section/css/forum_custom-colours.css' %}" media="all" />
     <link type="text/css" rel="stylesheet" href="{% static 'help_section/css/forum_fonts.css' %}" media="all" />
     <link type="text/css" rel="stylesheet" href="{% static 'help_section/css/help_layout.css' %}" media="all" />
+    <link href="{% static 'help_section/css/accessibility.css' %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Przejdź do głównej treści</a>
 
-<header class="p-header mb-4">
+<header class="p-header mb-4" role="banner">
     <nav class="navbar navbar-expand-lg container">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'help_page' %}" title="Strona główna">
@@ -27,7 +30,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <form class="d-flex ms-auto" role="search" action="{% url 'search_facilities' %}" method="get">
+                <form class="d-flex ms-auto" role="search" aria-label="Formularz wyszukiwania placówek" action="{% url 'search_facilities' %}" method="get">
                     <input class="form-control me-2" type="search" placeholder="Szukaj" aria-label="Szukaj" name="q" value="">
                     <button class="btn btn-outline-light" type="submit">Szukaj</button>
                 </form>
@@ -38,38 +41,55 @@
 
 <div class="container">
     <div class="row">
-        <aside class="col-md-3">
+        <aside class="col-md-3" role="complementary" aria-label="Nawigacja boczna">
             <div class="block sidebar-block"> 
                  <div class="block-container">
-                    <h3 class="block-header">Nawigacja</h3>
+                    <h3 class="block-header" id="navigation-heading">Nawigacja</h3>
                     <div class="block-body">
-                        <div class="list-group list-group-flush"> 
-                            <a href="{% url 'facility_categories' %}" class="list-group-item list-group-item-action"> 
+                        <nav aria-labelledby="navigation-heading">
+                            <div class="list-group list-group-flush" role="list"> 
+                            <a href="{% url 'facility_categories' %}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do kategorii placówek"> 
                                 <i class="fa fa-folder-open fa-fw me-2" aria-hidden="true"></i> Kategorie placówek
                             </a>
-                            <a href="{% url 'facility_list_alphabetical' %}" class="list-group-item list-group-item-action">
+                            <a href="{% url 'facility_list_alphabetical' %}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do alfabetycznego spisu placówek">
                                 <i class="fa fa-list fa-fw me-2" aria-hidden="true"></i>
                                 Alfabetyczny spis placówek
                             </a>
-                            <a href="{% url 'facility_map' %}" class="list-group-item list-group-item-action">
+                            <a href="{% url 'facility_map' %}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do mapy placówek">
                                 <i class="fa fa-map-marker fa-fw me-2" aria-hidden="true"></i> Mapa placówek
                             </a>
-                            <a href="{% url 'top_rated_facilities' %}" class="list-group-item list-group-item-action">
+                            <a href="{% url 'top_rated_facilities' %}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do najlepiej ocenianych placówek">
                                 <i class="fa fa-star fa-fw me-2" aria-hidden="true"></i> Najlepsze placówki
                             </a>
-                            <a href="{% url 'faq' %}" class="list-group-item list-group-item-action">
+                            <a href="{% url 'faq' %}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do często zadawanych pytań">
                                 <i class="fa fa-question-circle fa-fw me-2" aria-hidden="true"></i> FAQ
                             </a>
-                        </div>
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'notifications' %}" class="list-group-item list-group-item-action position-relative" role="listitem" aria-label="Przejdź do powiadomień">
+                                <i class="fa fa-bell fa-fw me-2" aria-hidden="true"></i> Powiadomienia
+                                <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;" aria-label="Liczba nieprzeczytanych powiadomień">
+                                    <span id="notification-count" aria-live="polite">0</span>
+                                </span>
+                            </a>
+                            {% endif %}
+                            </div>
+                        </nav>
                         <div class="mt-3 text-center">
-                            <a href="#" class="btn btn-hyperreal-one">Zaloguj się z hyperreal-one</a>
+                            {% if user.is_authenticated %}
+                                <div class="d-grid gap-2">
+                                    <span class="text-muted">Witaj, {{ user.username }}!</span>
+                                    <a href="#" class="btn btn-outline-secondary btn-sm">Wyloguj się</a>
+                                </div>
+                            {% else %}
+                                <a href="#" class="btn btn-hyperreal-one">Zaloguj się z hyperreal-one</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </aside>
 
-        <main class="col-md-9">
+        <main class="col-md-9" role="main" id="main-content">
             {% block page_content %} {# This is the correct block for page-specific content #}
                 {# Default content for the help_page itself (carousel, etc.) #}
                 <div class="block mb-4">
@@ -124,18 +144,18 @@
                 <div class="block">
                     <div class="block-container">
                         <div class="block-header">
-                            <h5><i class="fa fa-envelope"></i> Newsletter</h5>
+                            <h5><i class="fa fa-envelope" aria-hidden="true"></i> Newsletter</h5>
                         </div>
                         <div class="block-body">
                             <p>Bądź na bieżąco z nowymi placówkami i aktualizacjami!</p>
-                            <form id="newsletter-form" class="row g-3">
+                            <form id="newsletter-form" class="row g-3" role="form" aria-label="Formularz zapisu do newslettera">
                                 <div class="col-md-8">
                                     <input type="email" class="form-control" id="newsletter-email" 
                                            placeholder="Twój adres e-mail" required>
                                 </div>
                                 <div class="col-md-4">
                                     <button type="submit" class="btn btn-primary w-100">
-                                        <i class="fa fa-paper-plane"></i> Zapisz się
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i> Zapisz się
                                     </button>
                                 </div>
                             </form>
@@ -162,16 +182,16 @@
 <div id="chatbot-widget" style="position: fixed; bottom: 80px; right: 20px; width: 340px; z-index: 9999; display: none;">
   <div class="card shadow">
     <div class="card-header bg-secondary text-dark py-2 px-3">
-      <strong><i class="fa fa-robot me-2"></i>Zapytaj czatbota</strong>
+      <strong><i class="fa fa-robot me-2" aria-hidden="true"></i>Zapytaj czatbota</strong>
       <button id="chatbot-close" type="button" class="btn-close float-end" aria-label="Zamknij" style="font-size: 0.8rem;"></button>
     </div>
     <div class="card-body p-2" style="height: 220px; overflow-y: auto; font-size: 0.95rem; background: #f8f9fa;" id="chatbot-messages">
       <div class="text-muted small">Czatbot odpowiada na pytania o placówki i kategorie pomocy.</div>
     </div>
     <div class="card-footer p-2">
-      <form id="chatbot-form" autocomplete="off">
+      <form id="chatbot-form" autocomplete="off" role="form" aria-label="Formularz czatbota">
         <div class="input-group">
-          <input type="text" id="chatbot-input" class="form-control" placeholder="Napisz pytanie..." required />
+          <input type="text" id="chatbot-input" class="form-control" placeholder="Napisz pytanie..." aria-label="Wpisz pytanie do czatbota" required />
           <button class="btn btn-secondary" type="submit">Wyślij</button>
         </div>
       </form>
@@ -245,8 +265,108 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    // Notifications functionality moved to separate script block
+
+    // UX Animations and Interactions
+    
+    // Add slide-in animation to blocks when they come into view
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('slide-in-up');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all blocks for animation
+    document.querySelectorAll('.block').forEach(block => {
+        observer.observe(block);
+    });
+    
+    // Add loading spinner to forms on submit
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fa fa-spinner loading-spinner"></i> Ładowanie...';
+                submitBtn.disabled = true;
+                
+                // Re-enable after 3 seconds if form hasn't redirected
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 3000);
+            }
+        });
+    });
+    
+    // Add smooth scroll to anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Add pulse animation to notification badges
+    const notificationBadges = document.querySelectorAll('.badge');
+    notificationBadges.forEach(badge => {
+        if (badge.textContent && parseInt(badge.textContent) > 0) {
+            badge.classList.add('pulse');
+        }
+    });
+    
+    // Add hover effect to clickable elements
+    document.querySelectorAll('.clickable, .list-group-item, .card').forEach(element => {
+        element.style.cursor = 'pointer';
+    });
+
 });
 </script>
+
+{% if user.is_authenticated %}
+<script>
+// Notifications functionality
+var notificationsUrl = '{% url "get_unread_notifications_count" %}';
+
+function loadUnreadNotificationsCount() {
+    fetch(notificationsUrl)
+        .then(response => response.json())
+        .then(data => {
+            const badge = document.getElementById('notification-badge');
+            const count = document.getElementById('notification-count');
+            if (data.count > 0) {
+                count.textContent = data.count;
+                badge.style.display = 'inline';
+            } else {
+                badge.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error loading notifications count:', error));
+}
+
+// Load notifications count on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadUnreadNotificationsCount();
+    // Refresh notifications count every 30 seconds
+    setInterval(loadUnreadNotificationsCount, 30000);
+});
+</script>
+{% endif %}
 
 {% block extra_js %}{% endblock %}
 </body>

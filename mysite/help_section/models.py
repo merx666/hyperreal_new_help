@@ -242,3 +242,57 @@ class Newsletter(models.Model):
     class Meta:
         verbose_name = "Newsletter"
         verbose_name_plural = "Newsletter"
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = [
+        ('new_facility', 'Nowa placówka'),
+        ('facility_update', 'Aktualizacja placówki'),
+        ('new_comment', 'Nowy komentarz'),
+        ('new_rating', 'Nowa ocena'),
+        ('system', 'Powiadomienie systemowe'),
+        ('newsletter', 'Newsletter'),
+    ]
+    
+    PRIORITY_LEVELS = [
+        ('low', 'Niski'),
+        ('medium', 'Średni'),
+        ('high', 'Wysoki'),
+        ('urgent', 'Pilny'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications', null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)  # For non-registered users
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES, default='system')
+    priority = models.CharField(max_length=10, choices=PRIORITY_LEVELS, default='medium')
+    is_read = models.BooleanField(default=False)
+    is_sent = models.BooleanField(default=False)
+    facility = models.ForeignKey(Facility, on_delete=models.CASCADE, null=True, blank=True, related_name='notifications')
+    created_at = models.DateTimeField(auto_now_add=True)
+    sent_at = models.DateTimeField(null=True, blank=True)
+    
+    def __str__(self):
+        recipient = self.user.username if self.user else self.email
+        return f'{self.title} - {recipient}'
+    
+    class Meta:
+        verbose_name = "Powiadomienie"
+        verbose_name_plural = "Powiadomienia"
+        ordering = ['-created_at']
+
+class NotificationPreference(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='notification_preferences')
+    email_notifications = models.BooleanField(default=True)
+    new_facilities = models.BooleanField(default=True)
+    facility_updates = models.BooleanField(default=False)
+    new_comments = models.BooleanField(default=False)
+    new_ratings = models.BooleanField(default=False)
+    newsletter = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return f'Preferencje powiadomień - {self.user.username}'
+    
+    class Meta:
+        verbose_name = "Preferencje powiadomień"
+        verbose_name_plural = "Preferencje powiadomień"

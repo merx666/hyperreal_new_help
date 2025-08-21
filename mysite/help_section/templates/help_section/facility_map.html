@@ -1,7 +1,17 @@
 {% extends 'help_section/help_page.html' %}
 {% load static %}
 
+{% block extra_head %}
+    <meta name="description" content="Interaktywna mapa placówek leczenia uzależnień w Polsce. Znajdź najbliższą placówkę terapeutyczną na mapie z filtrami i szczegółowymi informacjami.">
+    <meta name="keywords" content="mapa placówek, leczenie uzależnień, placówki odwykowe, mapa terapii, lokalizacja placówek, Polska">
+    <meta property="og:title" content="Mapa placówek leczenia uzależnień - Hyperreal Help">
+    <meta property="og:description" content="Interaktywna mapa placówek leczenia uzależnień w Polsce z możliwością filtrowania i wyszukiwania.">
+    <title>Mapa placówek leczenia uzależnień - Hyperreal Help</title>
+{% endblock %}
+
 {% block extra_css %}
+<!-- Preconnect to Leaflet CDN -->
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
     #map {
@@ -49,51 +59,51 @@
     <div class="block mb-4">
         <div class="block-container">
             <div class="block-header">
-                <h4><i class="fa fa-map-marker"></i> Mapa placówek</h4>
-                <span class="badge bg-secondary ms-2" id="facility-count">{{ facilities|length }} placówek</span>
+                <h4><i class="fa fa-map-marker" aria-hidden="true"></i> Mapa placówek</h4>
+                <span class="badge bg-secondary ms-2" id="facility-count" aria-label="Liczba placówek na mapie: {{ facilities|length }}">{{ facilities|length }} placówek</span>
             </div>
             <div class="block-body">
                 <!-- Filtry -->
                 <div class="filter-section">
                     <div class="row">
                         <div class="col-md-4">
-                            <h6><i class="fa fa-filter"></i> Województwo</h6>
-                            <div id="voivodeship-filters">
+                            <h6><i class="fa fa-filter" aria-hidden="true"></i> Województwo</h6>
+                            <div id="voivodeship-filters" role="group" aria-label="Filtry województw">
                                 <!-- Filtry będą dodane przez JavaScript -->
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <h6><i class="fa fa-filter"></i> Typ uzależnienia</h6>
-                            <div id="addiction-filters">
+                            <h6><i class="fa fa-filter" aria-hidden="true"></i> Typ uzależnienia</h6>
+                            <div id="addiction-filters" role="group" aria-label="Filtry typów uzależnień">
                                 <!-- Filtry będą dodane przez JavaScript -->
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <h6><i class="fa fa-filter"></i> Typ placówki</h6>
-                            <div id="facility-type-filters">
+                            <h6><i class="fa fa-filter" aria-hidden="true"></i> Typ placówki</h6>
+                            <div id="facility-type-filters" role="group" aria-label="Filtry typów placówek">
                                 <!-- Filtry będą dodane przez JavaScript -->
                             </div>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-12">
-                            <button class="btn btn-outline-secondary btn-sm" onclick="clearAllFilters()">
-                                <i class="fa fa-times"></i> Wyczyść wszystkie filtry
+                            <button class="btn btn-outline-secondary btn-sm" onclick="clearAllFilters()" aria-label="Wyczyść wszystkie filtry mapy">
+                                <i class="fa fa-times" aria-hidden="true"></i> Wyczyść wszystkie filtry
                             </button>
-                            <button class="btn btn-primary btn-sm ms-2" onclick="getUserLocation()">
-                                <i class="fa fa-location-arrow"></i> Moja lokalizacja
+                            <button class="btn btn-primary btn-sm ms-2" onclick="getUserLocation()" aria-label="Pokaż moją lokalizację na mapie">
+                                <i class="fa fa-location-arrow" aria-hidden="true"></i> Moja lokalizacja
                             </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Mapa -->
-                <div id="map"></div>
+                <div id="map" role="application" aria-label="Interaktywna mapa placówek terapeutycznych" tabindex="0"></div>
 
                 <!-- Informacje o mapie -->
                 <div class="mt-3">
                     <small class="text-muted">
-                        <i class="fa fa-info-circle"></i> 
+                        <i class="fa fa-info-circle" aria-hidden="true"></i> 
                         Kliknij na marker, aby zobaczyć szczegóły placówki. 
                         Użyj filtrów, aby zawęzić wyniki.
                     </small>
@@ -104,7 +114,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script>
 let map;
 let markers = [];
@@ -170,15 +180,15 @@ function createPopupContent(facility) {
     let content = `
         <div class="facility-popup">
             <h6><strong>${facility.name}</strong></h6>
-            <p><i class="fa fa-map-marker"></i> ${facility.address_city || 'Brak adresu'}</p>
+            <p><i class="fa fa-map-marker" aria-hidden="true"></i> ${facility.address_city || 'Brak adresu'}</p>
     `;
     
     if (facility.phone_number) {
-        content += `<p><i class="fa fa-phone"></i> ${facility.phone_number}</p>`;
+        content += `<p><i class="fa fa-phone" aria-hidden="true"></i> ${facility.phone_number}</p>`;
     }
     
     if (facility.email) {
-        content += `<p><i class="fa fa-envelope"></i> ${facility.email}</p>`;
+        content += `<p><i class="fa fa-envelope" aria-hidden="true"></i> ${facility.email}</p>`;
     }
     
     if (facility.description) {
@@ -204,7 +214,7 @@ function createPopupContent(facility) {
     
     content += `
         <a href="/help/placowka/${facility.slug}/" class="btn btn-sm btn-outline-primary">
-            <i class="fa fa-info-circle"></i> Szczegóły
+            <i class="fa fa-info-circle" aria-hidden="true"></i> Szczegóły
         </a>
     </div>`;
     
@@ -369,4 +379,4 @@ document.addEventListener('DOMContentLoaded', function() {
 // Inicjalizacja mapy po załadowaniu strony
 document.addEventListener('DOMContentLoaded', initMap);
 </script>
-{% endblock %} 
+{% endblock %}

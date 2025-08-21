@@ -1,0 +1,227 @@
+{% extends 'help_section/base.html' %}
+{% load static %}
+
+{% block title %}Powiadomienia - HyperReal Help{% endblock %}
+
+{% block extra_css %}
+<style>
+.notifications-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.notification-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.notification-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.notification-item.unread {
+    border-left: 4px solid #007bff;
+    background: #f8f9ff;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.notification-title {
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    font-size: 1.1em;
+}
+
+.notification-type {
+    background: #007bff;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+}
+
+.notification-type.new_facility { background: #28a745; }
+.notification-type.facility_update { background: #ffc107; color: #333; }
+.notification-type.new_comment { background: #17a2b8; }
+.notification-type.new_rating { background: #fd7e14; }
+.notification-type.system { background: #6c757d; }
+.notification-type.newsletter { background: #e83e8c; }
+
+.notification-message {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.notification-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+    color: #888;
+}
+
+.notification-date {
+    font-style: italic;
+}
+
+.notification-priority {
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.priority-low { background: #d4edda; color: #155724; }
+.priority-medium { background: #fff3cd; color: #856404; }
+.priority-high { background: #f8d7da; color: #721c24; }
+.priority-urgent { background: #f5c6cb; color: #721c24; font-weight: bold; }
+
+.no-notifications {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.no-notifications i {
+    font-size: 4em;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.pagination {
+    margin-top: 30px;
+}
+
+.notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.notifications-title {
+    margin: 0;
+    color: #333;
+}
+
+.preferences-link {
+    background: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.preferences-link:hover {
+    background: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="notifications-container">
+    <div class="notifications-header">
+        <h1 class="notifications-title">Twoje powiadomienia</h1>
+        <nav aria-label="Nawigacja powiadomień">
+            <a href="{% url 'notification_preferences' %}" class="preferences-link" aria-label="Przejdź do ustawień powiadomień">
+                <i class="fas fa-cog" aria-hidden="true"></i> Ustawienia powiadomień
+            </a>
+        </nav>
+    </div>
+
+    {% if notifications %}
+        <div role="list" aria-label="Lista powiadomień">
+            {% for notification in notifications %}
+            <div class="notification-item {% if not notification.is_read %}unread{% endif %}" role="listitem" aria-label="Powiadomienie: {{ notification.title }}">
+                <div class="notification-header">
+                    <h3 class="notification-title">{{ notification.title }}</h3>
+                    <span class="notification-type {{ notification.notification_type }}" aria-label="Typ powiadomienia: {{ notification.get_notification_type_display }}">
+                        {{ notification.get_notification_type_display }}
+                    </span>
+                </div>
+                
+                <div class="notification-message">
+                    {{ notification.message|linebreaks }}
+                </div>
+                
+                <div class="notification-meta">
+                    <span class="notification-date" aria-label="Data utworzenia: {{ notification.created_at|date:'d.m.Y H:i' }}">
+                        <i class="fas fa-clock" aria-hidden="true"></i> {{ notification.created_at|date:"d.m.Y H:i" }}
+                    </span>
+                    <span class="notification-priority priority-{{ notification.priority }}" aria-label="Priorytet: {{ notification.get_priority_display }}">
+                        {{ notification.get_priority_display }}
+                    </span>
+                </div>
+                
+                {% if notification.facility %}
+                <div style="margin-top: 10px;">
+                    <a href="{% url 'facility_detail' notification.facility.slug %}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-external-link-alt" aria-hidden="true"></i> Zobacz placówkę
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Paginacja -->
+        {% if page_obj.has_other_pages %}
+        <nav aria-label="Nawigacja powiadomień">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="Przejdź do pierwszej strony powiadomień">&laquo; Pierwsza</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Przejdź do poprzedniej strony powiadomień">Poprzednia</a>
+                    </li>
+                {% endif %}
+                
+                <li class="page-item active">
+                    <span class="page-link" aria-current="page" aria-label="Aktualna strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}">
+                        Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}
+                    </span>
+                </li>
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Przejdź do następnej strony powiadomień">Następna</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Przejdź do ostatniej strony powiadomień">Ostatnia &raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    {% else %}
+        <div class="no-notifications">
+            <i class="fas fa-bell-slash" aria-hidden="true"></i>
+            <h3>Brak powiadomień</h3>
+            <p>Nie masz jeszcze żadnych powiadomień. Gdy pojawią się nowe informacje, znajdziesz je tutaj.</p>
+            <a href="{% url 'help_page' %}" class="btn btn-primary">
+                <i class="fas fa-home" aria-hidden="true"></i> Wróć do strony głównej
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -2,11 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models import Avg, Q, Count
-from .models import Facility, Comment, RatingCategory, FacilityRating
+from .models import Facility, Comment, RatingCategory, FacilityRating, Notification, NotificationPreference
 from .forms import CommentForm, RatingForm
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 import json
 
 def help_view(request):
@@ -24,11 +26,17 @@ def search_facilities(request):
     voivodeship = request.GET.get('voivodeship', '')
     addiction_type = request.GET.get('addiction_type', '')
     facility_type = request.GET.get('facility_type', '')
+    therapy_type = request.GET.get('therapy_type', '')
+    program_length = request.GET.get('program_length', '')
+    age_gender_group = request.GET.get('age_gender_group', '')
+    has_email = request.GET.get('has_email', '')
+    has_website = request.GET.get('has_website', '')
+    min_rating = request.GET.get('min_rating', '')
     sort_by = request.GET.get('sort', 'name')
     
     facilities = Facility.objects.all()
     
-    # Filtry
+    # Filtry tekstowe
     if query:
         facilities = facilities.filter(
             Q(name__icontains=query) |
@@ -36,9 +44,12 @@ def search_facilities(request):
             Q(description__icontains=query) |
             Q(voivodeship__icontains=query) |
             Q(addiction_types_text__icontains=query) |
-            Q(facility_type_text__icontains=query)
+            Q(facility_type_text__icontains=query) |
+            Q(therapy_types_text__icontains=query) |
+            Q(program_lengths_text__icontains=query)
         )
     
+    # Filtry kategorii
     if voivodeship:
         facilities = facilities.filter(voivodeships__name__icontains=voivodeship)
     
@@ -47,6 +58,36 @@ def search_facilities(request):
     
     if facility_type:
         facilities = facilities.filter(facility_types__name__icontains=facility_type)
+        
+    if therapy_type:
+        facilities = facilities.filter(therapy_types__name__icontains=therapy_type)
+        
+    if program_length:
+        facilities = facilities.filter(program_lengths__name__icontains=program_length)
+        
+    if age_gender_group:
+        facilities = facilities.filter(age_gender_groups__name__icontains=age_gender_group)
+    
+    # Filtry dostępności kontaktu
+    if has_email == 'true':
+        facilities = facilities.exclude(email__isnull=True).exclude(email__exact='')
+    elif has_email == 'false':
+        facilities = facilities.filter(Q(email__isnull=True) | Q(email__exact=''))
+        
+    if has_website == 'true':
+        facilities = facilities.exclude(website__isnull=True).exclude(website__exact='')
+    elif has_website == 'false':
+        facilities = facilities.filter(Q(website__isnull=True) | Q(website__exact=''))
+    
+    # Filtr ocen
+    if min_rating:
+        try:
+            min_rating_value = float(min_rating)
+            facilities = facilities.annotate(
+                avg_rating=Avg('ratings__value')
+            ).filter(avg_rating__gte=min_rating_value)
+        except ValueError:
+            pass
     
     # Sortowanie
     if sort_by == 'name':
@@ -55,15 +96,27 @@ def search_facilities(request):
         facilities = facilities.order_by('voivodeship', 'name')
     elif sort_by == 'type':
         facilities = facilities.order_by('facility_type_text', 'name')
+    elif sort_by == 'rating':
+        facilities = facilities.annotate(
+            avg_rating=Avg('ratings__value')
+        ).order_by('-avg_rating', 'name')
+    elif sort_by == 'newest':
+        facilities = facilities.order_by('-created_at')
+    elif sort_by == 'updated':
+        facilities = facilities.order_by('-updated_at')
     
     facilities = facilities.distinct()
     
     # Pobierz dostępne opcje dla filtrów
-    from .models import Voivodeship, AddictionType, FacilityType
+    from .models import (Voivodeship, AddictionType, FacilityType, 
+                        TherapyType, ProgramLength, AgeGenderGroup)
     
     voivodeships = Voivodeship.objects.all().order_by('name')
     addiction_types = AddictionType.objects.all().order_by('name')
     facility_types = FacilityType.objects.all().order_by('name')
+    therapy_types = TherapyType.objects.all().order_by('name')
+    program_lengths = ProgramLength.objects.all().order_by('name')
+    age_gender_groups = AgeGenderGroup.objects.all().order_by('name')
     
     context = {
         'facilities': facilities,
@@ -71,10 +124,19 @@ def search_facilities(request):
         'voivodeship': voivodeship,
         'addiction_type': addiction_type,
         'facility_type': facility_type,
+        'therapy_type': therapy_type,
+        'program_length': program_length,
+        'age_gender_group': age_gender_group,
+        'has_email': has_email,
+        'has_website': has_website,
+        'min_rating': min_rating,
         'sort_by': sort_by,
         'voivodeships': voivodeships,
         'addiction_types': addiction_types,
         'facility_types': facility_types,
+        'therapy_types': therapy_types,
+        'program_lengths': program_lengths,
+        'age_gender_groups': age_gender_groups,
         'now': timezone.now(),
     }
     return render(request, 'help_section/search_results.html', context)
@@ -413,3 +475,109 @@ def chatbot_api(request):
     else:
         answer = 'Nie znalazłem odpowiedzi na Twoje pytanie. Spróbuj inaczej lub zapytaj o konkretny typ placówki, miasto lub problem.'
     return JsonResponse({'answer': answer})
+
+@login_required
+def notifications_view(request):
+    """Widok listy powiadomień użytkownika"""
+    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+    
+    # Paginacja
+    paginator = Paginator(notifications, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Oznacz powiadomienia jako przeczytane
+    unread_notifications = notifications.filter(is_read=False)
+    unread_notifications.update(is_read=True)
+    
+    context = {
+        'page_obj': page_obj,
+        'notifications': page_obj,
+        'unread_count': 0,  # Po oznaczeniu jako przeczytane
+    }
+    return render(request, 'help_section/notifications.html', context)
+
+@login_required
+def notification_preferences_view(request):
+    """Widok ustawień preferencji powiadomień"""
+    preferences, created = NotificationPreference.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        preferences.email_notifications = request.POST.get('email_notifications') == 'on'
+        preferences.new_facilities = request.POST.get('new_facilities') == 'on'
+        preferences.facility_updates = request.POST.get('facility_updates') == 'on'
+        preferences.new_comments = request.POST.get('new_comments') == 'on'
+        preferences.new_ratings = request.POST.get('new_ratings') == 'on'
+        preferences.newsletter = request.POST.get('newsletter') == 'on'
+        preferences.save()
+        
+        return JsonResponse({'success': True, 'message': 'Preferencje zostały zapisane'})
+    
+    context = {
+        'preferences': preferences,
+    }
+    return render(request, 'help_section/notification_preferences.html', context)
+
+def get_unread_notifications_count(request):
+    """API endpoint dla liczby nieprzeczytanych powiadomień"""
+    if request.user.is_authenticated:
+        count = Notification.objects.filter(user=request.user, is_read=False).count()
+        return JsonResponse({'count': count})
+    return JsonResponse({'count': 0})
+
+@login_required
+def mark_notification_read(request, notification_id):
+    """Oznacz konkretne powiadomienie jako przeczytane"""
+    if request.method == 'POST':
+        try:
+            notification = Notification.objects.get(id=notification_id, user=request.user)
+            notification.is_read = True
+            notification.save()
+            return JsonResponse({'success': True})
+        except Notification.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Powiadomienie nie istnieje'})
+    return JsonResponse({'success': False, 'error': 'Nieprawidłowa metoda'})
+
+
+def create_sample_notifications(request):
+    """Create sample notifications for testing (admin only)"""
+    if not request.user.is_superuser:
+        return JsonResponse({'error': 'Permission denied'}, status=403)
+    
+    # Create sample notifications
+    notifications = [
+        {
+            'type': 'info',
+            'priority': 'medium',
+            'title': 'Nowa placówka dodana',
+            'message': 'Dodano nową placówkę terapeutyczną w Twojej okolicy.',
+        },
+        {
+            'type': 'success',
+            'priority': 'low',
+            'title': 'Newsletter wysłany',
+            'message': 'Najnowszy newsletter został wysłany na Twój adres email.',
+        },
+        {
+            'type': 'warning',
+            'priority': 'high',
+            'title': 'Aktualizacja placówki',
+            'message': 'Placówka, którą obserwujesz, zaktualizowała swoje dane kontaktowe.',
+        },
+    ]
+    
+    created_count = 0
+    for notif_data in notifications:
+        notification = Notification.objects.create(
+            user=request.user,
+            notification_type=notif_data['type'],
+            priority=notif_data['priority'],
+            title=notif_data['title'],
+            message=notif_data['message']
+        )
+        created_count += 1
+    
+    return JsonResponse({
+        'success': True,
+        'message': f'Created {created_count} sample notifications'
+    })

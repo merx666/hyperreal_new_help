@@ -12,12 +12,12 @@
             </div>
             <div class="block-body">
                 {% if facilities_list %}
-                    <div class="list-group">
+                    <div class="list-group" role="list">
                         {% for facility in facilities_list %}
-                            <div class="list-group-item">
+                            <div class="list-group-item" role="listitem">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">
-                                        <a href="{% url 'facility_detail' slug=facility.slug %}">{{ facility.name }}</a>
+                                        <a href="{% url 'facility_detail' slug=facility.slug %}" aria-label="Przejdź do szczegółów placówki {{ facility.name }}">{{ facility.name }}</a>
                                     </h5>
                                     {% if facility.voivodeship %}
                                         <small class="text-muted">{{ facility.voivodeship }}</small>
@@ -26,11 +26,11 @@
                                 
                                 {% if facility.full_address_text_detail %}
                                     <p class="mb-1">
-                                        <i class="fa fa-map-marker"></i> {{ facility.full_address_text_detail }}
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i> {{ facility.full_address_text_detail }}
                                     </p>
                                 {% elif facility.address_street or facility.address_city %}
                                     <p class="mb-1">
-                                        <i class="fa fa-map-marker"></i> {{ facility.address_street }}, {{ facility.address_city }}
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i> {{ facility.address_street }}, {{ facility.address_city }}
                                     </p>
                                 {% endif %}
 
@@ -38,17 +38,17 @@
                                     <div>
                                         {% if facility.phone_number %}
                                             <small class="text-muted me-3">
-                                                <i class="fa fa-phone"></i> {{ facility.phone_number }}
+                                                <i class="fa fa-phone" aria-hidden="true"></i> {{ facility.phone_number }}
                                             </small>
                                         {% endif %}
                                         {% if facility.email %}
                                             <small class="text-muted me-3">
-                                                <i class="fa fa-envelope"></i> {{ facility.email }}
+                                                <i class="fa fa-envelope" aria-hidden="true"></i> {{ facility.email }}
                                             </small>
                                         {% endif %}
                                         {% if facility.website %}
                                             <small class="text-muted">
-                                                <i class="fa fa-globe"></i> <a href="{{ facility.website }}" target="_blank">Strona WWW</a>
+                                                <i class="fa fa-globe" aria-hidden="true"></i> <a href="{{ facility.website }}" target="_blank" rel="noopener noreferrer" aria-label="Otwórz stronę internetową placówki {{ facility.name }} w nowej karcie">Strona WWW</a>
                                             </small>
                                         {% endif %}
                                     </div>

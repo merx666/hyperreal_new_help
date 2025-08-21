@@ -1,0 +1,21 @@
+# SSH Config for HyperReal Help Deploy Key
+# Add this to your ~/.ssh/config file
+
+Host github-hyperrealhelp
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/hyperrealhelp_deploy_key
+    IdentitiesOnly yes
+
+# Usage example:
+# git clone git@github-hyperrealhelp:username/hyperrealhelp.git
+# git remote set-url origin git@github-hyperrealhelp:username/hyperrealhelp.git
+
+# Deploy Key (Public Key) - Add this to your GitHub repository:
+# Go to: Repository Settings > Deploy keys > Add deploy key
+# Title: HyperReal Help Deploy Key
+# Key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII6LQF9+60akYIwCcYRcK6gdZxhRKFhjEbqnfWLsr1db deploy-key-hyperrealhelp
+# Allow write access: ✓ (if you need to push code)
+
+# Private Key Location: ~/.ssh/hyperrealhelp_deploy_key
+# Public Key Location: ~/.ssh/hyperrealhelp_deploy_key.pub

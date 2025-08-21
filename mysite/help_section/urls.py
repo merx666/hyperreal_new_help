@@ -16,4 +16,10 @@ urlpatterns = [
     path('kategorie/<str:category_type>/<slug:category_slug>/', views.facility_list_by_category, name='facility_list_by_category'),
     path('placowka/<slug:slug>/', views.facility_detail_view, name='facility_detail'),
     path('api/chatbot/', views.chatbot_api, name='chatbot_api'),
+    # URLs dla systemu powiadomień
+    path('powiadomienia/', views.notifications_view, name='notifications'),
+    path('ustawienia-powiadomien/', views.notification_preferences_view, name='notification_preferences'),
+    path('api/unread-notifications/', views.get_unread_notifications_count, name='unread_notifications_count'),
+    path('api/mark-notification-read/<int:notification_id>/', views.mark_notification_read, name='mark_notification_read'),
+    path('notifications/create-samples/', views.create_sample_notifications, name='create_sample_notifications'),
 ]

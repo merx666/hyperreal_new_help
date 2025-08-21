@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://hyperreal.info/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /api/
+
+# Allow important pages
+Allow: /help/
+Allow: /help/search/
+Allow: /help/facility/
+Allow: /help/map/
+Allow: /help/categories/
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1

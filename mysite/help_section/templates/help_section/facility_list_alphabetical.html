@@ -13,25 +13,29 @@
             </div>
             <div class="block-body">
                 <!-- Nawigacja alfabetyczna -->
-                <div class="mb-4">
-                    <div class="d-flex flex-wrap gap-1">
-                        <a href="{% url 'facility_list_alphabetical' %}" class="btn btn-sm btn-outline-primary">
-                            Wszystkie
-                        </a>
-                        {% for letter, count in alphabet.items %}
-                            <a href="{% url 'facility_list_alphabetical_letter' letter=letter %}" 
-                               class="btn btn-sm {% if current_letter == letter %}btn-primary{% else %}btn-outline-primary{% endif %}">
-                                {{ letter }} ({{ count }})
+                <nav aria-label="Nawigacja alfabetyczna po placówkach">
+                    <div class="mb-4">
+                        <div class="d-flex flex-wrap gap-1" role="list">
+                            <a href="{% url 'facility_list_alphabetical' %}" class="btn btn-sm btn-outline-primary" role="listitem" aria-label="Pokaż wszystkie placówki">
+                                Wszystkie
                             </a>
-                        {% endfor %}
+                            {% for letter, count in alphabet.items %}
+                                <a href="{% url 'facility_list_alphabetical_letter' letter=letter %}" 
+                                   class="btn btn-sm {% if current_letter == letter %}btn-primary{% else %}btn-outline-primary{% endif %}" 
+                                   role="listitem" 
+                                   aria-label="Pokaż placówki na literę {{ letter }}, liczba placówek: {{ count }}"{% if current_letter == letter %} aria-current="page"{% endif %}>
+                                    {{ letter }} ({{ count }})
+                                </a>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
+                </nav>
 
                 <!-- Lista placówek -->
                 {% if facilities %}
-                    <div class="list-group">
+                    <div class="list-group" role="list" aria-label="Lista placówek">
                         {% for facility in facilities %}
-                            <a href="{% url 'facility_detail' slug=facility.slug %}" class="list-group-item list-group-item-action">
+                            <a href="{% url 'facility_detail' slug=facility.slug %}" class="list-group-item list-group-item-action" role="listitem" aria-label="Szczegóły placówki: {{ facility.name }}">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">{{ facility.name }}</h5>
                                     {% if facility.voivodeship %}
@@ -40,18 +44,18 @@
                                 </div>
                                 {% if facility.full_address_text_detail %}
                                     <p class="mb-1">
-                                        <i class="fa fa-map-marker"></i> {{ facility.full_address_text_detail }}
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i> {{ facility.full_address_text_detail }}
                                     </p>
                                 {% endif %}
                                 <div class="d-flex justify-content-between align-items-center">
                                     {% if facility.phone_number %}
                                         <small class="text-muted">
-                                            <i class="fa fa-phone"></i> {{ facility.phone_number }}
+                                            <i class="fa fa-phone" aria-hidden="true"></i> {{ facility.phone_number }}
                                         </small>
                                     {% endif %}
                                     {% if facility.email %}
                                         <small class="text-muted">
-                                            <i class="fa fa-envelope"></i> {{ facility.email }}
+                                            <i class="fa fa-envelope" aria-hidden="true"></i> {{ facility.email }}
                                         </small>
                                     {% endif %}
                                 </div>
@@ -77,4 +81,4 @@
             </div>
         </div>
     </div>
-{% endblock page_content %} 
+{% endblock page_content %}
