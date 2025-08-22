@@ -14,7 +14,7 @@ Host github-hyperrealhelp
 # Deploy Key (Public Key) - Add this to your GitHub repository:
 # Go to: Repository Settings > Deploy keys > Add deploy key
 # Title: HyperReal Help Deploy Key
-# Key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII6LQF9+60akYIwCcYRcK6gdZxhRKFhjEbqnfWLsr1db deploy-key-hyperrealhelp
+# Key: 
 # Allow write access: ✓ (if you need to push code)
 
 # Private Key Location: ~/.ssh/hyperrealhelp_deploy_key
