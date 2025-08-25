@@ -1,0 +1,240 @@
+{% extends 'help_section/help_page.html' %}
+
+{% block extra_head %}
+{% if facility %}
+    <meta name="description" content="{{ facility.name }} - {{ facility.description|truncate(20, true, '...') or 'Placówka leczenia uzależnień' }}. Adres: {{ facility.address }}, {{ facility.city }}. Sprawdź oceny i opinie.">
+    <meta name="keywords" content="{{ facility.name }}, leczenie uzależnień, {{ facility.city }}, placówka odwykowa, terapia">
+    <meta property="og:title" content="{{ facility.name }} - Hyperreal Help">
+    <meta property="og:description" content="{{ facility.description|truncate(20, true, '...') or 'Placówka leczenia uzależnień' }}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <title>{{ facility.name }} - Hyperreal Help</title>
+{% endif %}
+{% endblock %}
+
+{% block page_content %}
+
+{% if facility %}
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('help_page') }}">Strona główna</a></li>
+            <li class="breadcrumb-item"><a href="{{ url('facility_categories') }}">Kategorie placówek</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ facility.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0">{{ facility.name }}</h4>
+                        {% set avg_rating = facility|avg_rating %}
+                        {% if avg_rating > 0 %}
+                            <div class="mt-2">
+                                <span class="facility-rating" role="img" aria-label="Ocena placówki: {{ avg_rating }} na 10, na podstawie {{ facility|rating_count }} ocen">
+                                    <span aria-hidden="true">{{ facility|avg_rating|rating_stars }}</span>
+                                    <span class="rating-value">({{ avg_rating }})</span>
+                                    <small class="text-muted">({{ facility|rating_count }} ocen)</small>
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <a href="{{ url('facility_map') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i> Pokaż na mapie
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="block-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Adres</dt>
+                    <dd class="col-sm-9">{{ facility.full_address_text_detail or '-' }}</dd>
+                    <dt class="col-sm-3">Telefon</dt>
+                    <dd class="col-sm-9">{% if facility.phone_number %}<a href="tel:{{ facility.phone_number }}" aria-label="Zadzwoń pod numer {{ facility.phone_number }}">{{ facility.phone_number }}</a>{% else %}-{% endif %}</dd>
+                    <dt class="col-sm-3">E-mail</dt>
+                    <dd class="col-sm-9">{% if facility.email %}<a href="mailto:{{ facility.email }}" aria-label="Wyślij email na adres {{ facility.email }}">{{ facility.email }}</a>{% else %}-{% endif %}</dd>
+                    <dt class="col-sm-3">WWW</dt>
+                    <dd class="col-sm-9">{% if facility.website %}<a href="{{ facility.website }}" target="_blank" rel="noopener noreferrer" aria-label="Otwórz stronę internetową placówki w nowej karcie">{{ facility.website }}</a>{% else %}-{% endif %}</dd>
+                    <dt class="col-sm-3">Liczba miejsc</dt>
+                    <dd class="col-sm-9">{{ facility.number_of_places or '-' }}</dd>
+                </dl>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Kategorie i klasyfikacje</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>Rodzaje uzależnień:</strong> {% for at in facility.addiction_types.all() %}{{ at.display_name }}{% if not loop.last %}, {% endif %}{% else %}-{% endfor %}</li>
+                            <li><strong>Typy placówki:</strong> {% for ft in facility.facility_types.all() %}{{ ft.display_name }}{% if not loop.last %}, {% endif %}{% else %}-{% endfor %}</li>
+                            <li><strong>Województwa:</strong> {% for v in facility.voivodeships.all() %}{{ v.display_name }}{% if not loop.last %}, {% endif %}{% else %}-{% endfor %}</li>
+                            <li><strong>Długości programów:</strong> {% for pl in facility.program_lengths.all() %}{{ pl.display_name }}{% if not loop.last %}, {% endif %}{% else %}-{% endfor %}</li>
+                            <li><strong>Rodzaje terapii:</strong> {% for tt in facility.therapy_types.all() %}{{ tt.display_name }}{% if not loop.last %}, {% endif %}{% else %}-{% endfor %}</li>
+                            <li><strong>Psychoterapie:</strong> {% for pt in facility.psychotherapy_types.all() %}{{ pt.display_name }}{% if not loop.last %}, {% endif %}{% else %}-{% endfor %}</li>
+                            <li><strong>Poradnictwa:</strong> {% for ct in facility.counseling_types.all() %}{{ ct.display_name }}{% if not loop.last %}, {% endif %}{% else %}-{% endfor %}</li>
+                            <li><strong>Działania dodatkowe:</strong> {% for oa in facility.other_actions.all() %}{{ oa.display_name }}{% if not loop.last %}, {% endif %}{% else %}-{% endfor %}</li>
+                            <li><strong>Kłopoty z prawem:</strong> {% for li in facility.legal_issues.all() %}{{ li.display_name }}{% if not loop.last %}, {% endif %}{% else %}-{% endfor %}</li>
+                            <li><strong>Grupy wiekowe/płeć:</strong> {% for ag in facility.age_gender_groups.all() %}{{ ag.display_name }}{% if not loop.last %}, {% endif %}{% else %}-{% endfor %}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Opis placówki</h5>
+                        <div>{{ facility.description|replace('\n', '<br>') or 'Brak opisu.' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Ratings Section - ENHANCED #}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">
+                <i class="fa fa-star text-warning" aria-hidden="true"></i> Ocena placówki
+            </div>
+            <div class="block-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5 class="mb-3">Średnie oceny użytkowników:</h5>
+                        {% if rating_categories %}
+                            <div class="rating-summary mb-4">
+                                {% for category in rating_categories %}
+                                    <div class="rating-category mb-3 p-3 border rounded">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1">{{ category.name }}</h6>
+                                                {% if category.description %}
+                                                    <small class="text-muted">{{ category.description }}</small>
+                                                {% endif %}
+                                            </div>
+                                            <div class="text-end">
+                                                {% set avg_rating = average_ratings|get_item(category.slug) %}
+                                                {% if avg_rating %}
+                                                    <div class="rating-stars mb-1">
+                                                        {% for i in range(1, 6) %}
+                                                            {% if i <= (avg_rating|int) %}
+                                                                <i class="fa fa-star text-warning" aria-hidden="true"></i>
+                                                            {% else %}
+                                                                <i class="fa fa-star-o text-muted" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <span class="badge bg-primary rounded-pill">{{ "%.1f"|format(avg_rating) }} / 10</span>
+                                                {% else %}
+                                                    <div class="rating-stars mb-1">
+                                                        {% for i in range(1, 6) %}
+                                                            <i class="fa fa-star-o text-muted" aria-hidden="true"></i>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <span class="text-muted fst-italic">Brak ocen</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> Brak zdefiniowanych kategorii ocen.
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <div class="rating-form-container p-3 bg-light rounded">
+                            <h5 class="mb-3"><i class="fa fa-edit" aria-hidden="true"></i> Oceń placówkę:</h5>
+                            <form method="post" id="rating-form" role="form" aria-label="Formularz oceny placówki">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <div class="rating-form-fields">
+                                    {{ rating_form.as_p() }}
+                                </div>
+                                <button type="submit" name="submit_rating" class="btn btn-primary w-100 mt-3" aria-label="Zapisz oceny placówki">
+                                    <i class="fa fa-save" aria-hidden="true"></i> Zapisz oceny
+                                </button>
+                            </form>
+                            <small class="text-muted mt-2 d-block">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i> Oceny w skali 1-10, gdzie 10 to najwyższa ocena.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Comments Section - ENHANCED #}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">
+                <i class="fa fa-comments text-info" aria-hidden="true"></i> Komentarze i opinie
+                <span class="badge bg-secondary ms-2" aria-label="Liczba komentarzy: {{ comments.count }}">{{ comments.count }}</span>
+            </div>
+            <div class="block-body">
+                <!-- Add Comment Form -->
+                <div class="add-comment-section mb-4 p-3 bg-light rounded">
+                    <h5 class="mb-3"><i class="fa fa-plus-circle" aria-hidden="true"></i> Dodaj swoją opinię</h5>
+                    <form method="post" id="comment-form" role="form" aria-label="Formularz dodawania komentarza">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="comment-form-fields">
+                            {{ comment_form.as_p() }}
+                        </div>
+                        <button type="submit" name="submit_comment" class="btn btn-success" aria-label="Dodaj komentarz do placówki">
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i> Dodaj komentarz
+                        </button>
+                    </form>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Comments List -->
+                <div class="comments-section">
+                    <h5 class="mb-4">
+                        <i class="fa fa-list" aria-hidden="true"></i> Opinie użytkowników 
+                        {% if comments.count > 0 %}
+                            <small class="text-muted">({{ comments.count }} 
+                            {% if comments.count == 1 %}komentarz
+                            {% elif comments.count < 5 %}komentarze
+                            {% else %}komentarzy{% endif %})</small>
+                        {% endif %}
+                    </h5>
+                    
+                    {% for comment in comments %}
+                        <div class="comment-item mb-4 p-3 border rounded">
+                            <div class="comment-header d-flex align-items-center mb-2">
+                                <div class="user-avatar me-3">
+                                    <div class="avatar-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 50%;">
+                                        {{ comment.author.username[0]|upper }}
+                                    </div>
+                                </div>
+                                <div class="comment-meta">
+                                    <h6 class="mb-0">{{ comment.author.username }}</h6>
+                                    <small class="text-muted">
+                                        <i class="fa fa-clock-o" aria-hidden="true"></i> {{ comment.created_at.strftime('%d/%m/%Y, %H:%M') }}
+                                        {% if comment.is_approved %}
+                                            <span class="badge bg-success ms-2">Zatwierdzone</span>
+                                        {% else %}
+                                            <span class="badge bg-warning ms-2">Oczekuje na moderację</span>
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="comment-content">
+                                <p class="mb-0">{{ comment.content|replace('\n', '<br>') }}</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="no-comments text-center py-5">
+                            <i class="fa fa-comment-o fa-3x text-muted mb-3" aria-hidden="true"></i>
+                            <h6 class="text-muted">Brak komentarzy</h6>
+                            <p class="text-muted">Bądź pierwszy, który podzieli się opinią o tej placówce!</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+    <div class="alert alert-warning">Nie znaleziono placówki.</div>
+{% endif %}
+
+{% endblock page_content %}

@@ -1,0 +1,105 @@
+{% extends 'help_section/help_page.html' %}
+
+{% block page_content %}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">
+                {{ category_name or "Placówki" }}
+                {% if facilities_list %}
+                    <span class="badge bg-secondary ms-2">{{ facilities_list|length }} placówek</span>
+                {% endif %}
+            </div>
+            <div class="block-body">
+                {% if facilities_list %}
+                    <div class="list-group" role="list">
+                        {% for facility in facilities_list %}
+                            <div class="list-group-item" role="listitem">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">
+                                        <a href="{{ url('facility_detail', slug=facility.slug) }}" aria-label="Przejdź do szczegółów placówki {{ facility.name }}">{{ facility.name }}</a>
+                                    </h5>
+                                    {% if facility.voivodeship %}
+                                        <small class="text-muted">{{ facility.voivodeship }}</small>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if facility.full_address_text_detail %}
+                                    <p class="mb-1">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i> {{ facility.full_address_text_detail }}
+                                    </p>
+                                {% elif facility.address_street or facility.address_city %}
+                                    <p class="mb-1">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i> {{ facility.address_street }}, {{ facility.address_city }}
+                                    </p>
+                                {% endif %}
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        {% if facility.phone_number %}
+                                            <small class="text-muted me-3">
+                                                <i class="fa fa-phone" aria-hidden="true"></i> {{ facility.phone_number }}
+                                            </small>
+                                        {% endif %}
+                                        {% if facility.email %}
+                                            <small class="text-muted me-3">
+                                                <i class="fa fa-envelope" aria-hidden="true"></i> {{ facility.email }}
+                                            </small>
+                                        {% endif %}
+                                        {% if facility.website %}
+                                            <small class="text-muted">
+                                                <i class="fa fa-globe" aria-hidden="true"></i> <a href="{{ facility.website }}" target="_blank" rel="noopener noreferrer" aria-label="Otwórz stronę internetową placówki {{ facility.name }} w nowej karcie">Strona WWW</a>
+                                            </small>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{{ url('facility_detail', slug=facility.slug) }}" class="btn btn-sm btn-outline-primary">
+                                        Szczegóły
+                                    </a>
+                                </div>
+
+                                <!-- Kategorie -->
+                                <div class="mt-2">
+                                    {% if facility.addiction_types.all() %}
+                                        <div class="mb-1">
+                                            <small class="text-muted">Uzależnienia:</small>
+                                            {% for addiction_type in facility.addiction_types.all() %}
+                                                <span class="badge bg-info me-1">{{ addiction_type.display_name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if facility.facility_types.all() %}
+                                        <div class="mb-1">
+                                            <small class="text-muted">Typ placówki:</small>
+                                            {% for facility_type in facility.facility_types.all() %}
+                                                <span class="badge bg-success me-1">{{ facility_type.display_name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if facility.therapy_types.all() %}
+                                        <div class="mb-1">
+                                            <small class="text-muted">Terapia:</small>
+                                            {% for therapy_type in facility.therapy_types.all() %}
+                                                <span class="badge bg-warning me-1">{{ therapy_type.display_name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>Nie znaleziono placówek w tej kategorii.</p>
+                        <p>Spróbuj:</p>
+                        <ul>
+                            <li>Sprawdzić inne kategorie</li>
+                            <li>Użyć wyszukiwania</li>
+                            <li>Przejrzeć alfabetyczny spis placówek</li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock page_content %}

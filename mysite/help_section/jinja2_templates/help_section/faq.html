@@ -1,0 +1,49 @@
+{% extends 'help_page.html' %}
+
+{% block page_content %}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">
+                <h4><i class="fa fa-question-circle" aria-hidden="true"></i> Często zadawane pytania (FAQ)</h4>
+            </div>
+            <div class="block-body">
+                <div class="accordion" id="faqAccordion" role="tablist" aria-label="Lista często zadawanych pytań">
+                    {% for faq in faq_data %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq{{ loop.index }}">
+                                <button class="accordion-button {{ 'collapsed' if not loop.first }}" 
+                                        type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#collapse{{ loop.index }}" 
+                                        aria-expanded="{{ 'true' if loop.first else 'false' }}" 
+                                        aria-controls="collapse{{ loop.index }}">
+                                    {{ faq.question }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ loop.index }}" 
+                                 class="accordion-collapse collapse {{ 'show' if loop.first }}" 
+                                 aria-labelledby="faq{{ loop.index }}" 
+                                 data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    {{ faq.answer }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="mt-4">
+                    <div class="alert alert-info">
+                        <h5><i class="fa fa-info-circle" aria-hidden="true"></i> Nie znalazłeś odpowiedzi?</h5>
+                        <p>Jeśli masz pytanie, na które nie ma odpowiedzi powyżej, możesz:</p>
+                        <ul>
+                            <li>Użyć <a href="{{ url('search_facilities') }}" aria-label="Przejdź do zaawansowanego wyszukiwania placówek">zaawansowanego wyszukiwania</a> placówek</li>
+                            <li>Sprawdzić <a href="{{ url('facility_categories') }}" aria-label="Przejdź do kategorii placówek">kategorie placówek</a></li>
+                            <li>Przejrzeć <a href="{{ url('facility_map') }}" aria-label="Przejdź do mapy placówek">mapę placówek</a></li>
+                            <li>Skontaktować się z nami przez formularz kontaktowy</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

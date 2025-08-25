@@ -1,0 +1,83 @@
+{% extends 'help_page.html' %}
+
+{% block page_content %}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">
+                {% if current_letter %}
+                    Alfabetyczny spis placówek - litera {{ current_letter }}
+                {% else %}
+                    Alfabetyczny spis wszystkich placówek
+                {% endif %}
+            </div>
+            <div class="block-body">
+                <!-- Nawigacja alfabetyczna -->
+                <nav aria-label="Nawigacja alfabetyczna po placówkach">
+                    <div class="mb-4">
+                        <div class="d-flex flex-wrap gap-1" role="list">
+                            <a href="{{ url('facility_list_alphabetical') }}" class="btn btn-sm btn-outline-primary" role="listitem" aria-label="Pokaż wszystkie placówki">
+                                Wszystkie
+                            </a>
+                            {% for letter, count in alphabet.items() %}
+                                <a href="{{ url('facility_list_alphabetical_letter', letter=letter) }}" 
+                                   class="btn btn-sm {{ 'btn-primary' if current_letter == letter else 'btn-outline-primary' }}" 
+                                   role="listitem" 
+                                   aria-label="Pokaż placówki na literę {{ letter }}, liczba placówek: {{ count }}"{{ ' aria-current="page"' if current_letter == letter }}>
+                                    {{ letter }} ({{ count }})
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Lista placówek -->
+                {% if facilities %}
+                    <div class="list-group" role="list" aria-label="Lista placówek">
+                        {% for facility in facilities %}
+                            <a href="{{ url('facility_detail', slug=facility.slug) }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Szczegóły placówki: {{ facility.name }}">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ facility.name }}</h5>
+                                    {% if facility.voivodeship %}
+                                        <small class="text-muted">{{ facility.voivodeship }}</small>
+                                    {% endif %}
+                                </div>
+                                {% if facility.full_address_text_detail %}
+                                    <p class="mb-1">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i> {{ facility.full_address_text_detail }}
+                                    </p>
+                                {% endif %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {% if facility.phone_number %}
+                                        <small class="text-muted">
+                                            <i class="fa fa-phone" aria-hidden="true"></i> {{ facility.phone_number }}
+                                        </small>
+                                    {% endif %}
+                                    {% if facility.email %}
+                                        <small class="text-muted">
+                                            <i class="fa fa-envelope" aria-hidden="true"></i> {{ facility.email }}
+                                        </small>
+                                    {% endif %}
+                                </div>
+                                {% if facility.addiction_types.all %}
+                                    <div class="mt-2">
+                                        {% for addiction_type in facility.addiction_types.all %}
+                                            <span class="badge bg-secondary me-1">{{ addiction_type.display_name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        {% if current_letter %}
+                            Nie znaleziono placówek zaczynających się od litery "{{ current_letter }}".
+                        {% else %}
+                            Nie znaleziono żadnych placówek.
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock page_content %}

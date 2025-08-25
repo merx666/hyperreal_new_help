@@ -1,0 +1,220 @@
+{% extends 'help_page.html' %}
+
+{% block extra_head %}
+    <meta name="description" content="Kategorie placówek leczenia uzależnień w Polsce. Przeglądaj placówki według rodzaju uzależnienia, typu terapii, wieku, płci i lokalizacji.">
+    <meta name="keywords" content="kategorie placówek, rodzaje uzależnień, typy terapii, placówki odwykowe, leczenie uzależnień, Polska">
+    <meta property="og:title" content="Kategorie placówek leczenia uzależnień - Hyperreal Help">
+    <meta property="og:description" content="Przeglądaj placówki leczenia uzależnień według kategorii - rodzaj uzależnienia, typ terapii, grupa wiekowa i więcej.">
+    <title>Kategorie placówek leczenia uzależnień - Hyperreal Help</title>
+{% endblock %}
+
+{% block page_content %}
+    <div class="block mb-4" id="categories-block">
+        <div class="block-container">
+            <div class="block-header">Kategorie placówek</div>
+            <div class="block-body">
+                <div class="accordion" id="facilityCategoriesAccordion">
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingRodzajUzaleznien">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRodzajUzaleznien" aria-expanded="false" aria-controls="collapseRodzajUzaleznien">
+                                Rodzaj uzależnień
+                            </button>
+                        </h2>
+                        <div id="collapseRodzajUzaleznien" class="accordion-collapse collapse" aria-labelledby="headingRodzajUzaleznien" data-bs-parent="#facilityCategoriesAccordion">
+                            <div class="accordion-body">
+                                <div class="list-group list-group-flush" role="list">
+                                    <a href="{{ url('facility_list_by_category', category_type='rodzaj-uzaleznien', category_slug='uzaleznienie-od-alkoholu-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek leczących uzależnienie od alkoholu">Uzależnienie od alkoholu</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='rodzaj-uzaleznien', category_slug='uzaleznienie-od-narkotykow-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek leczących uzależnienie od narkotyków">Uzależnienie od narkotyków</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingGrupaWiekowaPlec">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGrupaWiekowaPlec" aria-expanded="false" aria-controls="collapseGrupaWiekowaPlec">
+                                Grupa wiekowa i płeć
+                            </button>
+                        </h2>
+                        <div id="collapseGrupaWiekowaPlec" class="accordion-collapse collapse" aria-labelledby="headingGrupaWiekowaPlec" data-bs-parent="#facilityCategoriesAccordion">
+                            <div class="accordion-body">
+                                <div class="list-group list-group-flush" role="list">
+                                    <a href="{{ url('facility_list_by_category', category_type='grupa-wiekowa-plec', category_slug='placowka-adresowana-tylko-do-doroslych-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek adresowanych tylko do dorosłych">Placówka adresowana tylko do dorosłych</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='grupa-wiekowa-plec', category_slug='placowka-adresowana-tylko-do-kobiet-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek adresowanych tylko do kobiet">Placówka adresowana tylko do kobiet</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='grupa-wiekowa-plec', category_slug='placowka-adresowana-tylko-do-mezczyzn-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek adresowanych tylko do mężczyzn">Placówka adresowana tylko do mężczyzn</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='grupa-wiekowa-plec', category_slug='placowka-adresowana-tylko-do-mlodziezy-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek adresowanych tylko do młodzieży">Placówka adresowana tylko do młodzieży</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='grupa-wiekowa-plec', category_slug='placowka-adresowana-zarowno-do-mlodziezy-jak-i-doroslych-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek adresowanych zarówno do młodzieży jak i dorosłych">Placówka adresowana zarówno do młodzieży jak i dorosłych</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='grupa-wiekowa-plec', category_slug='placowka-przyjmuje-uzaleznione-matki-z-dziecmi-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek przyjmujących uzależnione matki z dziećmi">Placówka przyjmuje uzależnione matki z dziećmi</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTypPlacowki">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTypPlacowki" aria-expanded="false" aria-controls="collapseTypPlacowki">
+                                Typ placówki
+                            </button>
+                        </h2>
+                        <div id="collapseTypPlacowki" class="accordion-collapse collapse" aria-labelledby="headingTypPlacowki" data-bs-parent="#facilityCategoriesAccordion">
+                            <div class="accordion-body">
+                                <div class="list-group list-group-flush" role="list">
+                                    <a href="{{ url('facility_list_by_category', category_type='typ-placowki', category_slug='hostel-mieszkanie-dom-readaptacyjny-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do hosteli, mieszkań i domów readaptacyjnych">Hostel / mieszkanie / dom readaptacyjny</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='typ-placowki', category_slug='placowka-ambulatoryjna-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek ambulatoryjnych">Placówka ambulatoryjna</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='typ-placowki', category_slug='placowka-detoksykacyjna-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek detoksykacyjnych">Placowka detoksykacyjna</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='typ-placowki', category_slug='placowka-stacjonarna-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek stacjonarnych">Placówka stacjonarna</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingDlugoscProgramu">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDlugoscProgramu" aria-expanded="false" aria-controls="collapseDlugoscProgramu">
+                                Długość programu
+                            </button>
+                        </h2>
+                        <div id="collapseDlugoscProgramu" class="accordion-collapse collapse" aria-labelledby="headingDlugoscProgramu" data-bs-parent="#facilityCategoriesAccordion">
+                            <div class="accordion-body">
+                                <div class="list-group list-group-flush" role="list">
+                                    <a href="{{ url('facility_list_by_category', category_type='dlugosc-programu', category_slug='program-dugoterminowy-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek z programem długoterminowym">Program długoterminowy</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='dlugosc-programu', category_slug='program-krotkoterminowy-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek z programem krótkoterminowym">Program krótkoterminowy</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='dlugosc-programu', category_slug='program-srednioterminowy-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek z programem średnioterminowym">Program średnioterminowy</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingRodzajTerapii">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRodzajTerapii" aria-expanded="false" aria-controls="collapseRodzajTerapii">
+                                Rodzaj terapii
+                            </button>
+                        </h2>
+                        <div id="collapseRodzajTerapii" class="accordion-collapse collapse" aria-labelledby="headingRodzajTerapii" data-bs-parent="#facilityCategoriesAccordion">
+                            <div class="accordion-body">
+                                <div class="list-group list-group-flush" role="list">
+                                    <a href="{{ url('facility_list_by_category', category_type='rodzaj-terapii', category_slug='model-minnesota-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek stosujących model Minnesota">Model Minnesota</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='rodzaj-terapii', category_slug='spoecznosc-terapeutyczna-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek ze społecznością terapeutyczną">Społeczność terapeutyczna</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='rodzaj-terapii', category_slug='terapia-grupowa-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek oferujących terapię grupową">Terapia grupowa</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='rodzaj-terapii', category_slug='terapia-indywidualna-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek oferujących terapię indywidualną">Terapia indywidualna</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingPoradnictwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePoradnictwo" aria-expanded="false" aria-controls="collapsePoradnictwo">
+                                Poradnictwo
+                            </button>
+                        </h2>
+                        <div id="collapsePoradnictwo" class="accordion-collapse collapse" aria-labelledby="headingPoradnictwo" data-bs-parent="#facilityCategoriesAccordion">
+                            <div class="accordion-body">
+                                <div class="list-group list-group-flush" role="list">
+                                    <a href="{{ url('facility_list_by_category', category_type='poradnictwo', category_slug='poradnictwo-dla-rodzin-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek oferujących poradnictwo dla rodzin">Poradnictwo dla rodzin</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='poradnictwo', category_slug='poradnictwo-dla-uzaleznionych-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek oferujących poradnictwo dla uzależnionych">Poradnictwo dla uzależnionych</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingPsychoterapia">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePsychoterapia" aria-expanded="false" aria-controls="collapsePsychoterapia">
+                                Psychoterapia
+                            </button>
+                        </h2>
+                        <div id="collapsePsychoterapia" class="accordion-collapse collapse" aria-labelledby="headingPsychoterapia" data-bs-parent="#facilityCategoriesAccordion">
+                            <div class="accordion-body">
+                                <div class="list-group list-group-flush" role="list">
+                                    <a href="{{ url('facility_list_by_category', category_type='psychoterapia', category_slug='psychoterapia-rodzin-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek oferujących psychoterapię rodzin">Psychoterapia rodzin</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='psychoterapia', category_slug='psychoterapia-uzaleznionych-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek oferujących psychoterapię uzależnionych">Psychoterapia uzależnionych</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingDzialaniaKlopotyPrawem">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDzialaniaKlopotyPrawem" aria-expanded="false" aria-controls="collapseDzialaniaKlopotyPrawem">
+                                Działania związane z kłopotami z prawem
+                            </button>
+                        </h2>
+                        <div id="collapseDzialaniaKlopotyPrawem" class="accordion-collapse collapse" aria-labelledby="headingDzialaniaKlopotyPrawem" data-bs-parent="#facilityCategoriesAccordion">
+                            <div class="accordion-body">
+                                <div class="list-group list-group-flush" role="list">
+                                    <a href="{{ url('facility_list_by_category', category_type='dzialania-prawne', category_slug='konsultacje-prawne-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek oferujących konsultacje prawne">Konsultacje prawne</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='dzialania-prawne', category_slug='prowadzi-program-dla-osob-skierowanych-w-zwiazku-z-art-72-ust-1-ustawy-o-przeciwdziaaniu-narkomanii-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek prowadzących program dla osób skierowanych w związku z art. 72 ust. 1 ustawy o przeciwdziałaniu narkomanii">Prowadzi program dla osób skierowanych w związku z art. 72 ust. 1 ustawy o przeciwdziałaniu narkomanii</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='dzialania-prawne', category_slug='przyjmuje-osoby-zobowiazane-przez-sad-do-podjecia-leczenia-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action" role="listitem" aria-label="Przejdź do placówek przyjmujących osoby zobowiązane przez sąd do podjęcia leczenia">Przyjmuje osoby zobowiązane przez sąd do podjęcia leczenia</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingInneDzialania">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInneDzialania" aria-expanded="false" aria-controls="collapseInneDzialania">
+                                Inne działania
+                            </button>
+                        </h2>
+                        <div id="collapseInneDzialania" class="accordion-collapse collapse" aria-labelledby="headingInneDzialania" data-bs-parent="#facilityCategoriesAccordion">
+                            <div class="accordion-body">
+                                <div class="list-group list-group-flush">
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='redukcja-szkod-edukacja-i-poradnictwo-dla-osob-niezmotywowanych-do-leczenia-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Redukcja szkód/ Edukacja i poradnictwo dla osób niezmotywowanych do leczenia</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='swietlica-drop-in-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Świetlica / Drop-in</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='wymiana-igie-i-strzykawek-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Wymiana igieł i strzykawek</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='zapobieganie-nawrotom-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Zapobieganie nawrotom</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='podwojna-diagnoza-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">"Podwójna diagnoza"</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='badanie-na-obecnosc-hiv-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Badanie na obecność HIV</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='dziaania-pozastacjonarne-streetworking-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Działania pozastacjonarne / streetworking</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='etap-przedrezydencki-nowicjat-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Etap przedrezydencki / nowicjat</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='kierowanie-do-do-hostelu-mieszkania-readaptacyjnego-po-zakonczeniu-terapii-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Kierowanie do do hostelu / mieszkania readaptacyjnego po zakończeniu terapii</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='kierowanie-na-detoks-do-osrodka-rehabilitacyjnego-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Kierowanie na detoks / do ośrodka rehabilitacyjnego</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='mozliwosc-kontynuacji-nauki-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Możliwość kontynuacji nauki</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='mozliwosc-rozpoznania-dostarczonej-substancji-narkotycznej-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Możliwość rozpoznania dostarczonej substancji narkotycznej</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='mozliwosc-wykonania-testu-metabolity-narkotykow-w-moczu-lub-testy-krwi-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Możliwość wykonania testu (metabolity narkotyków w moczu lub testy krwi)</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='inne-dzialania', category_slug='opieka-duszpasterska-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">Opieka duszpasterska</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingWojewodztwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWojewodztwo" aria-expanded="false" aria-controls="collapseWojewodztwo">
+                                Województwo
+                            </button>
+                        </h2>
+                        <div id="collapseWojewodztwo" class="accordion-collapse collapse" aria-labelledby="headingWojewodztwo" data-bs-parent="#facilityCategoriesAccordion">
+                            <div class="accordion-body">
+                                <div class="list-group list-group-flush">
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='dolnoslaskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">dolnośląskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='kujawsko-pomorskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">kujawsko-pomorskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='lubelskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">lubelskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='lubuskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">lubuskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='mazowieckie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">mazowieckie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='maopolskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">małopolskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='opolskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">opolskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='podkarpackie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">podkarpackie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='podlaskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">podlaskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='pomorskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">pomorskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='slaskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">śląskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='swietokrzyskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">świętokrzyskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='warminsko-mazurskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">warmińsko-mazurskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='wielkopolskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">wielkopolskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='zachodniopomorskie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">zachodniopomorskie</a>
+                                    <a href="{{ url('facility_list_by_category', category_type='wojewodztwo', category_slug='odzkie-hyperreal-help-chcemy-pomoc') }}" class="list-group-item list-group-item-action">łódzkie</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page_content %}

@@ -1,0 +1,381 @@
+{% extends 'help_page.html' %}
+
+{% block extra_head %}
+    <meta name="description" content="Interaktywna mapa placówek leczenia uzależnień w Polsce. Znajdź najbliższą placówkę terapeutyczną na mapie z filtrami i szczegółowymi informacjami.">
+    <meta name="keywords" content="mapa placówek, leczenie uzależnień, placówki odwykowe, mapa terapii, lokalizacja placówek, Polska">
+    <meta property="og:title" content="Mapa placówek leczenia uzależnień - Hyperreal Help">
+    <meta property="og:description" content="Interaktywna mapa placówek leczenia uzależnień w Polsce z możliwością filtrowania i wyszukiwania.">
+    <title>Mapa placówek leczenia uzależnień - Hyperreal Help</title>
+{% endblock %}
+
+{% block extra_css %}
+<!-- Preconnect to Leaflet CDN -->
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+    #map {
+        height: 600px;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .map-controls {
+        margin-bottom: 20px;
+    }
+    .facility-popup {
+        max-width: 300px;
+    }
+    .facility-popup h6 {
+        margin-bottom: 10px;
+        color: #333;
+    }
+    .facility-popup p {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+    .facility-popup .badge {
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+    .filter-section {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .filter-section h6 {
+        margin-bottom: 10px;
+        color: #495057;
+    }
+    .filter-checkbox {
+        margin-right: 10px;
+        margin-bottom: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block page_content %}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">
+                <h4><i class="fa fa-map-marker" aria-hidden="true"></i> Mapa placówek</h4>
+                <span class="badge bg-secondary ms-2" id="facility-count" aria-label="Liczba placówek na mapie: {{ facilities|length }}">{{ facilities|length }} placówek</span>
+            </div>
+            <div class="block-body">
+                <!-- Filtry -->
+                <div class="filter-section">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6><i class="fa fa-filter" aria-hidden="true"></i> Województwo</h6>
+                            <div id="voivodeship-filters" role="group" aria-label="Filtry województw">
+                                <!-- Filtry będą dodane przez JavaScript -->
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="fa fa-filter" aria-hidden="true"></i> Typ uzależnienia</h6>
+                            <div id="addiction-filters" role="group" aria-label="Filtry typów uzależnień">
+                                <!-- Filtry będą dodane przez JavaScript -->
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="fa fa-filter" aria-hidden="true"></i> Typ placówki</h6>
+                            <div id="facility-type-filters" role="group" aria-label="Filtry typów placówek">
+                                <!-- Filtry będą dodane przez JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button class="btn btn-outline-secondary btn-sm" onclick="clearAllFilters()" aria-label="Wyczyść wszystkie filtry mapy">
+                                <i class="fa fa-times" aria-hidden="true"></i> Wyczyść wszystkie filtry
+                            </button>
+                            <button class="btn btn-primary btn-sm ms-2" onclick="getUserLocation()" aria-label="Pokaż moją lokalizację na mapie">
+                                <i class="fa fa-location-arrow" aria-hidden="true"></i> Moja lokalizacja
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mapa -->
+                <div id="map" role="application" aria-label="Interaktywna mapa placówek terapeutycznych" tabindex="0"></div>
+
+                <!-- Informacje o mapie -->
+                <div class="mt-3">
+                    <small class="text-muted">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i> 
+                        Kliknij na marker, aby zobaczyć szczegóły placówki. 
+                        Użyj filtrów, aby zawęzić wyniki.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script>
+let map;
+let markers = [];
+let allFacilities = [];
+let currentFilters = {
+    voivodeships: [],
+    addictionTypes: [],
+    facilityTypes: []
+};
+
+// Inicjalizacja mapy
+function initMap() {
+    map = L.map('map').setView([52.237049, 21.017532], 6); // Centrum Polski
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    
+    loadFacilities();
+}
+
+// Ładowanie danych placówek
+async function loadFacilities() {
+    try {
+        const response = await fetch('{{ url("facility_map_data") }}');
+        const data = await response.json();
+        allFacilities = data.facilities;
+        
+        // Dodaj filtry
+        setupFilters();
+        
+        // Dodaj markery
+        addMarkers(allFacilities);
+        
+        // Aktualizuj licznik
+        updateFacilityCount(allFacilities.length);
+        
+    } catch (error) {
+        console.error('Błąd podczas ładowania danych:', error);
+        document.getElementById('map').innerHTML = 
+            '<div class="alert alert-danger">Błąd podczas ładowania mapy. Spróbuj odświeżyć stronę.</div>';
+    }
+}
+
+// Dodawanie markerów
+function addMarkers(facilities) {
+    // Usuń istniejące markery
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
+    
+    facilities.forEach(facility => {
+        if (facility.latitude && facility.longitude) {
+            const marker = L.marker([facility.latitude, facility.longitude])
+                .bindPopup(createPopupContent(facility))
+                .addTo(map);
+            markers.push(marker);
+        }
+    });
+}
+
+// Tworzenie zawartości popup
+function createPopupContent(facility) {
+    let content = `
+        <div class="facility-popup">
+            <h6><strong>${facility.name}</strong></h6>
+            <p><i class="fa fa-map-marker" aria-hidden="true"></i> ${facility.address_city || 'Brak adresu'}</p>
+    `;
+    
+    if (facility.phone_number) {
+        content += `<p><i class="fa fa-phone" aria-hidden="true"></i> ${facility.phone_number}</p>`;
+    }
+    
+    if (facility.email) {
+        content += `<p><i class="fa fa-envelope" aria-hidden="true"></i> ${facility.email}</p>`;
+    }
+    
+    if (facility.description) {
+        content += `<p><small>${facility.description}</small></p>`;
+    }
+    
+    // Dodaj kategorie
+    if (facility.addiction_types.length > 0) {
+        content += `<p><strong>Uzależnienia:</strong><br>`;
+        facility.addiction_types.forEach(type => {
+            content += `<span class="badge bg-primary">${type}</span> `;
+        });
+        content += `</p>`;
+    }
+    
+    if (facility.facility_types.length > 0) {
+        content += `<p><strong>Typ placówki:</strong><br>`;
+        facility.facility_types.forEach(type => {
+            content += `<span class="badge bg-success">${type}</span> `;
+        });
+        content += `</p>`;
+    }
+    
+    content += `
+        <a href="/help/placowka/${facility.slug}/" class="btn btn-sm btn-outline-primary">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> Szczegóły
+        </a>
+    </div>`;
+    
+    return content;
+}
+
+// Konfiguracja filtrów
+function setupFilters() {
+    const voivodeships = [...new Set(allFacilities.flatMap(f => f.voivodeships))];
+    const addictionTypes = [...new Set(allFacilities.flatMap(f => f.addiction_types))];
+    const facilityTypes = [...new Set(allFacilities.flatMap(f => f.facility_types))];
+    
+    // Województwa
+    const voivodeshipContainer = document.getElementById('voivodeship-filters');
+    voivodeships.forEach(voivodeship => {
+        const checkbox = createFilterCheckbox(voivodeship, 'voivodeship', voivodeship);
+        voivodeshipContainer.appendChild(checkbox);
+    });
+    
+    // Typy uzależnień
+    const addictionContainer = document.getElementById('addiction-filters');
+    addictionTypes.forEach(type => {
+        const checkbox = createFilterCheckbox(type, 'addiction', type);
+        addictionContainer.appendChild(checkbox);
+    });
+    
+    // Typy placówek
+    const facilityTypeContainer = document.getElementById('facility-type-filters');
+    facilityTypes.forEach(type => {
+        const checkbox = createFilterCheckbox(type, 'facility', type);
+        facilityTypeContainer.appendChild(checkbox);
+    });
+}
+
+// Tworzenie checkboxa filtra
+function createFilterCheckbox(label, type, value) {
+    const div = document.createElement('div');
+    div.className = 'form-check form-check-inline';
+    div.innerHTML = `
+        <input class="form-check-input filter-checkbox" type="checkbox" 
+               id="${type}-${value.replace(/\s+/g, '-')}" 
+               data-type="${type}" data-value="${value}">
+        <label class="form-check-label" for="${type}-${value.replace(/\s+/g, '-')}">
+            ${label}
+        </label>
+    `;
+    
+    div.querySelector('input').addEventListener('change', applyFilters);
+    return div;
+}
+
+// Aplikowanie filtrów
+function applyFilters() {
+    const filteredFacilities = allFacilities.filter(facility => {
+        // Filtry województw
+        if (currentFilters.voivodeships.length > 0) {
+            const facilityVoivodeships = facility.voivodeships;
+            if (!currentFilters.voivodeships.some(v => facilityVoivodeships.includes(v))) {
+                return false;
+            }
+        }
+        
+        // Filtry uzależnień
+        if (currentFilters.addictionTypes.length > 0) {
+            const facilityAddictions = facility.addiction_types;
+            if (!currentFilters.addictionTypes.some(a => facilityAddictions.includes(a))) {
+                return false;
+            }
+        }
+        
+        // Filtry typów placówek
+        if (currentFilters.facilityTypes.length > 0) {
+            const facilityTypes = facility.facility_types;
+            if (!currentFilters.facilityTypes.some(t => facilityTypes.includes(t))) {
+                return false;
+            }
+        }
+        
+        return true;
+    });
+    
+    addMarkers(filteredFacilities);
+    updateFacilityCount(filteredFacilities.length);
+}
+
+// Aktualizacja licznika placówek
+function updateFacilityCount(count) {
+    document.getElementById('facility-count').textContent = `${count} placówek`;
+}
+
+// Czyszczenie wszystkich filtrów
+function clearAllFilters() {
+    document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    currentFilters = {
+        voivodeships: [],
+        addictionTypes: [],
+        facilityTypes: []
+    };
+    applyFilters();
+}
+
+// Geolokalizacja użytkownika
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                map.setView([lat, lng], 10);
+                // Dodaj czerwony marker użytkownika
+                const redIcon = L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+                L.marker([lat, lng], {icon: redIcon})
+                    .bindPopup('<strong>Twoja lokalizacja</strong>')
+                    .addTo(map);
+            },
+            error => {
+                alert('Nie udało się określić Twojej lokalizacji: ' + error.message);
+            }
+        );
+    } else {
+        alert('Twoja przeglądarka nie obsługuje geolokalizacji.');
+    }
+}
+
+// Nasłuchiwanie zmian filtrów
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const type = this.dataset.type;
+            const value = this.dataset.value;
+            
+            if (this.checked) {
+                if (type === 'voivodeship') currentFilters.voivodeships.push(value);
+                if (type === 'addiction') currentFilters.addictionTypes.push(value);
+                if (type === 'facility') currentFilters.facilityTypes.push(value);
+            } else {
+                if (type === 'voivodeship') {
+                    currentFilters.voivodeships = currentFilters.voivodeships.filter(v => v !== value);
+                }
+                if (type === 'addiction') {
+                    currentFilters.addictionTypes = currentFilters.addictionTypes.filter(a => a !== value);
+                }
+                if (type === 'facility') {
+                    currentFilters.facilityTypes = currentFilters.facilityTypes.filter(f => f !== value);
+                }
+            }
+            
+            applyFilters();
+        });
+    });
+});
+
+// Inicjalizacja mapy po załadowaniu strony
+document.addEventListener('DOMContentLoaded', initMap);
+</script>
+{% endblock %}

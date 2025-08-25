@@ -1,0 +1,108 @@
+{% extends 'help_page.html' %}
+
+{% block page_content %}
+    <div class="block mb-4">
+        <div class="block-container">
+            <div class="block-header">
+                <h4><i class="fa fa-star" aria-hidden="true"></i> Najlepsze placówki według ocen użytkowników</h4>
+            </div>
+            <div class="block-body">
+                {% if facilities %}
+                    <div class="alert alert-info">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i> 
+                        Placówki są posortowane według średniej oceny. Pokazujemy tylko placówki, które otrzymały oceny od użytkowników.
+                    </div>
+                    
+                    <div class="row" role="list" aria-label="Lista najlepiej ocenianych placówek">
+                        {% for facility in facilities %}
+                            <div class="col-md-6 mb-4" role="listitem">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title mb-0">
+                                <a href="{{ url('facility_detail', slug=facility.slug) }}" class="text-decoration-none" aria-label="Przejdź do szczegółów placówki {{ facility.name }}">
+                                    {{ facility.name }}
+                                </a>
+                            </h5>
+                            <div class="text-end">
+                                <div class="text-warning" role="img" aria-label="Ocena {{ avg_rating(facility)|round(1) }} na 5 gwiazdek">
+                                    {{ rating_stars(avg_rating(facility)) }}
+                                </div>
+                                                <small class="text-muted">
+                                                    {{ avg_rating(facility)|round(1) }}/5.0 
+                                                    ({{ rating_count(facility) }} ocen)
+                                                </small>
+                                            </div>
+                                        </div>
+                                        
+                                        {% if facility.address_city %}
+                            <p class="card-text text-muted">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i> {{ facility.address_city }}
+                            </p>
+                        {% endif %}
+                        
+                        {% if facility.phone_number %}
+                            <p class="card-text small">
+                                <i class="fa fa-phone" aria-hidden="true"></i> {{ facility.phone_number }}
+                            </p>
+                        {% endif %}
+                                        
+                                        <!-- Kategorie -->
+                                        <div class="mt-2">
+                                            {% if facility.addiction_types.all %}
+                                                <div class="mb-1">
+                                                    <small><strong>Uzależnienia:</strong></small><br>
+                                                    {% for at in facility.addiction_types.all %}
+                                                        <span class="badge bg-primary me-1">{{ at.display_name }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                            
+                                            {% if facility.facility_types.all %}
+                                                <div class="mb-1">
+                                                    <small><strong>Typ placówki:</strong></small><br>
+                                                    {% for ft in facility.facility_types.all %}
+                                                        <span class="badge bg-success me-1">{{ ft.display_name }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                        <a href="{{ url('facility_detail', slug=facility.slug) }}" class="btn btn-outline-primary btn-sm" aria-label="Zobacz szczegóły i oceny placówki {{ facility.name }}">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i> Szczegóły i oceny
+                        </a>
+                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <h5><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Brak ocen</h5>
+                        <p>Na razie żadna placówka nie otrzymała ocen od użytkowników.</p>
+                        <p>Bądź pierwszym, który oceni placówkę! Przejdź do <a href="{{ url('facility_categories') }}">kategorii placówek</a> i wybierz placówkę do oceny.</p>
+                    </div>
+                {% endif %}
+                
+                <!-- Informacje o systemie ocen -->
+                <div class="mt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fa fa-question-circle" aria-hidden="true"></i> Jak działają oceny?</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>System ocen pozwala użytkownikom oceniać placówki w różnych kategoriach:</p>
+                            <ul>
+                                {% for category in rating_categories %}
+                                    <li><strong>{{ category.name }}</strong> - {{ category.description }}</li>
+                                {% endfor %}
+                            </ul>
+                            <p>Oceny pomagają innym użytkownikom wybrać odpowiednią placówkę. Każdy może dodać swoją ocenę po odwiedzeniu strony szczegółów placówki.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
